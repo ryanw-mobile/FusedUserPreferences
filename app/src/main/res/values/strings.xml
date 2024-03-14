@@ -1,3 +1,7 @@
+<!--
+  ~ Copyright (c) 2024. Ryan Wong (hello@ryanwebmail.com)
+  -->
+
 <resources>
     <string name="app_name">Fused User Preferences</string>
 </resources>

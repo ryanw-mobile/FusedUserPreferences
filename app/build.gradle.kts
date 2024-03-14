@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024. Ryan Wong (hello@ryanwebmail.com)
+ */
+
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import java.io.FileInputStream
 import java.io.InputStreamReader
