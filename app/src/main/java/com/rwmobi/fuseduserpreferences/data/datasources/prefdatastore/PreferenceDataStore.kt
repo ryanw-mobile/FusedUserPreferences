@@ -14,18 +14,21 @@ import com.rwmobi.fuseduserpreferences.data.datasources.AppPreferences
 import com.rwmobi.fuseduserpreferences.data.datasources.PREF_KEY_BOOLEAN
 import com.rwmobi.fuseduserpreferences.data.datasources.PREF_KEY_INT
 import com.rwmobi.fuseduserpreferences.data.datasources.PREF_KEY_STRING
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class PreferenceDataStore(val dataStore: DataStore<Preferences>, dispatcher: CoroutineDispatcher) : AppPreferences {
-    private val stringPreferenceDefault = ""
-    private val booleanPreferenceDefault = false
-    private val intPreferenceDefault = 0
-
+class PreferenceDataStore(
+    private val dataStore: DataStore<Preferences>,
+    externalCoroutineScope: CoroutineScope,
+    private val stringPreferenceDefault: String = "",
+    private val booleanPreferenceDefault: Boolean = false,
+    private val intPreferenceDefault: Int = 0,
+) : AppPreferences {
     private val _stringPreference = MutableStateFlow(stringPreferenceDefault)
     override val stringPreference = _stringPreference.asStateFlow()
 
@@ -35,6 +38,9 @@ class PreferenceDataStore(val dataStore: DataStore<Preferences>, dispatcher: Cor
     private val _intPreference = MutableStateFlow(intPreferenceDefault)
     override val intPreference = _intPreference.asStateFlow()
 
+    private val _preferenceErrors = MutableSharedFlow<Throwable>()
+    override val preferenceErrors = _preferenceErrors.asSharedFlow()
+
     companion object {
         val DATASTORE_PREF_KEY_STRING = stringPreferencesKey(PREF_KEY_STRING)
         val DATASTORE_PREF_KEY_BOOLEAN = booleanPreferencesKey(PREF_KEY_BOOLEAN)
@@ -42,10 +48,9 @@ class PreferenceDataStore(val dataStore: DataStore<Preferences>, dispatcher: Cor
     }
 
     init {
-        CoroutineScope(dispatcher).launch {
+        externalCoroutineScope.launch {
             dataStore.data.catch { exception ->
-                // Handle dataStore.data flow exceptions here
-                exception.printStackTrace()
+                _preferenceErrors.emit(exception)
             }
                 .collect { prefs ->
                     _stringPreference.value = prefs[DATASTORE_PREF_KEY_STRING] ?: stringPreferenceDefault
@@ -56,26 +61,42 @@ class PreferenceDataStore(val dataStore: DataStore<Preferences>, dispatcher: Cor
     }
 
     override suspend fun updateStringPreference(newValue: String) {
-        dataStore.edit { mutablePreferences ->
-            mutablePreferences[DATASTORE_PREF_KEY_STRING] = newValue
+        try {
+            dataStore.edit { mutablePreferences ->
+                mutablePreferences[DATASTORE_PREF_KEY_STRING] = newValue
+            }
+        } catch (e: Throwable) {
+            _preferenceErrors.emit(e)
         }
     }
 
     override suspend fun updateBooleanPreference(newValue: Boolean) {
-        dataStore.edit { mutablePreferences ->
-            mutablePreferences[DATASTORE_PREF_KEY_BOOLEAN] = newValue
+        try {
+            dataStore.edit { mutablePreferences ->
+                mutablePreferences[DATASTORE_PREF_KEY_BOOLEAN] = newValue
+            }
+        } catch (e: Throwable) {
+            _preferenceErrors.emit(e)
         }
     }
 
     override suspend fun updateIntPreference(newValue: Int) {
-        dataStore.edit { mutablePreferences ->
-            mutablePreferences[DATASTORE_PREF_KEY_INT] = newValue
+        try {
+            dataStore.edit { mutablePreferences ->
+                mutablePreferences[DATASTORE_PREF_KEY_INT] = newValue
+            }
+        } catch (e: Throwable) {
+            _preferenceErrors.emit(e)
         }
     }
 
     override suspend fun clear() {
-        dataStore.edit { mutablePreferences ->
-            mutablePreferences.clear()
+        try {
+            dataStore.edit { mutablePreferences ->
+                mutablePreferences.clear()
+            }
+        } catch (e: Throwable) {
+            _preferenceErrors.emit(e)
         }
     }
 }

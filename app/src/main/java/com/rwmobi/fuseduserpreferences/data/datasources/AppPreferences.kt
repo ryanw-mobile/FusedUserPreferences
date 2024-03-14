@@ -4,6 +4,7 @@
 
 package com.rwmobi.fuseduserpreferences.data.datasources
 
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 const val PREF_KEY_STRING = "keyString"
@@ -15,6 +16,7 @@ interface AppPreferences {
     val stringPreference: StateFlow<String>
     val booleanPreference: StateFlow<Boolean>
     val intPreference: StateFlow<Int>
+    val preferenceErrors: SharedFlow<Throwable> // For error reporting
 
     suspend fun updateStringPreference(newValue: String)
     suspend fun updateBooleanPreference(newValue: Boolean)
