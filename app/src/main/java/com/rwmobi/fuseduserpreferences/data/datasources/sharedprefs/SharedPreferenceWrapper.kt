@@ -5,14 +5,14 @@
 package com.rwmobi.fuseduserpreferences.data.datasources.sharedprefs
 
 import android.content.SharedPreferences
+import com.rwmobi.fuseduserpreferences.data.datasources.AppPreferences
 import com.rwmobi.fuseduserpreferences.data.datasources.PREF_KEY_BOOLEAN
 import com.rwmobi.fuseduserpreferences.data.datasources.PREF_KEY_INT
 import com.rwmobi.fuseduserpreferences.data.datasources.PREF_KEY_STRING
-import com.rwmobi.fuseduserpreferences.data.datasources.Preferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class SharedPreferenceWrapper(private val sharedPreferences: SharedPreferences) : Preferences {
+class SharedPreferenceWrapper(private val sharedPreferences: SharedPreferences) : AppPreferences {
 
     private val _stringPreference = MutableStateFlow("")
     override val stringPreference = _stringPreference.asStateFlow()

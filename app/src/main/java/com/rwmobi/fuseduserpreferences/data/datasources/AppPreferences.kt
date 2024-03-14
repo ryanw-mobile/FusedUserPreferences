@@ -10,7 +10,7 @@ const val PREF_KEY_STRING = "keyString"
 const val PREF_KEY_BOOLEAN = "keyBoolean"
 const val PREF_KEY_INT = "keyInt"
 
-interface Preferences {
+interface AppPreferences {
 
     val stringPreference: StateFlow<String>
     val booleanPreference: StateFlow<Boolean>
