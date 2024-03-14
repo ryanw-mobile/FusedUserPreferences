@@ -1,16 +1,55 @@
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+import java.io.FileInputStream
+import java.io.InputStreamReader
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.gradleKtlint)
 }
 
 android {
     namespace = "com.rwmobi.fuseduserpreferences"
-    compileSdk = 34
+    compileSdk = libs.versions.compilesdk.get().toInt()
+
+    signingConfigs {
+        create("release") {
+            val isRunningOnCI = System.getenv("BITRISE") == "true"
+            val keystorePropertiesFile = file("../../keystore.properties")
+
+            if (isRunningOnCI) {
+                println("Signing Config: using environment variables")
+                keyAlias = System.getenv("CI_ANDROID_KEYSTORE_ALIAS")
+                keyPassword = System.getenv("CI_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+                storeFile = file(System.getenv("KEYSTORE_LOCATION"))
+                storePassword = System.getenv("CI_ANDROID_KEYSTORE_PASSWORD")
+            } else if (keystorePropertiesFile.exists()) {
+                println("Signing Config: using keystore properties")
+                val properties = Properties()
+                InputStreamReader(
+                    FileInputStream(keystorePropertiesFile),
+                    Charsets.UTF_8,
+                ).use { reader ->
+                    properties.load(reader)
+                }
+
+                keyAlias = properties.getProperty("alias")
+                keyPassword = properties.getProperty("pass")
+                storeFile = file(properties.getProperty("store"))
+                storePassword = properties.getProperty("storePass")
+            } else {
+                println("Signing Config: skipping signing")
+            }
+        }
+    }
 
     defaultConfig {
         applicationId = "com.rwmobi.fuseduserpreferences"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = libs.versions.minsdk.get().toInt()
+        targetSdk = libs.versions.targetsdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -18,35 +57,104 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // Bundle output filename
+        val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
+        setProperty("archivesBaseName", "FusedUserPrefs-$versionName-$timestamp")
     }
 
     buildTypes {
-        release {
+        fun setOutputFileName() {
+            applicationVariants.all {
+                val variant = this
+                variant.outputs
+                    .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+                    .forEach { output ->
+                        val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
+                        val outputFileName =
+                            "FusedUserPrefs-${variant.versionName}-$timestamp-${variant.name}.apk"
+                        output.outputFileName = outputFileName
+                    }
+            }
+        }
+
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+            isDebuggable = true
+            setOutputFileName()
+        }
+
+        getByName("release") {
+            isShrinkResources = true
+            isMinifyEnabled = true
+            isDebuggable = false
+            setProguardFiles(
+                listOf(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro",
+                ),
             )
+
+            signingConfigs.getByName("release").keyAlias?.let {
+                signingConfig = signingConfigs.getByName("release")
+            }
+
+            setOutputFileName()
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes.addAll(
+                listOf(
+                    "META-INF/proguard/*",
+                    "META-INF/*.kotlin_module",
+                    "META-INF/DEPENDENCIES",
+                    "META-INF/AL2.0",
+                    "META-INF/LGPL2.1",
+                    "META-INF/*.properties",
+                    "/*.properties",
+                    "META-INF/LICENSE*",
+                ),
+            )
         }
     }
+}
+
+kotlin {
+    jvmToolchain(21)
+}
+
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    android.set(true)
+    ignoreFailures.set(true)
+    reporters {
+        reporter(ReporterType.PLAIN)
+        reporter(ReporterType.CHECKSTYLE)
+        reporter(ReporterType.SARIF)
+    }
+}
+
+tasks.named("preBuild") {
+    dependsOn(tasks.named("ktlintFormat"))
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 dependencies {
