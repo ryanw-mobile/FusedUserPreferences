@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024. Ryan Wong (hello@ryanwebmail.com)
+ */
+
 package com.rwmobi.fuseduserpreferences
 
 import android.os.Bundle

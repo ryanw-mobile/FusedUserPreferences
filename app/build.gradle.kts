@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024. Ryan Wong (hello@ryanwebmail.com)
+ */
+
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import java.io.FileInputStream
 import java.io.InputStreamReader
@@ -117,6 +121,13 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.10"
     }
+    testOptions {
+        animationsDisabled = true
+
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
     packaging {
         resources {
             excludes.addAll(
@@ -167,7 +178,15 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.core.ktx)
     testImplementation(libs.junit)
+    testImplementation(libs.junit.vintage.engine)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.agent.jvm)
+    androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
