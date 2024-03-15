@@ -4,15 +4,20 @@ kotlin = "1.9.22"
 coreKtx = "1.12.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
+junitVintageEngine = "5.10.2"
 espressoCore = "3.5.1"
+kotlinxCoroutinesTest = "1.8.0"
 lifecycleRuntimeKtx = "2.7.0"
 activityCompose = "1.8.2"
 composeBom = "2024.02.02"
 ktlint = "12.1.0"
 datastorePreferences = "1.0.0"
+mockk = "1.13.10"
+coreKtxVersion = "1.5.0"
 
 # App configurations, not dependencies
 minsdk = "26"
+robolectric = "4.11.1"
 targetsdk = "34"
 compilesdk = "34"
 
@@ -31,8 +36,14 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-ktlint-gradle = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint" }
+junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junitVintageEngine" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-agent-jvm = { group = "io.mockk", name = "mockk-agent-jvm", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
