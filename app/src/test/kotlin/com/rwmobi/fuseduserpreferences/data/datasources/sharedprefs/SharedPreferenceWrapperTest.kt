@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024. Ryan Wong (hello@ryanwebmail.com)
+ */
+
 package com.rwmobi.fuseduserpreferences.data.datasources.sharedprefs
 
 import android.content.Context
