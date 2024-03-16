@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class PreferenceDataStore(
+class PreferenceDataStoreWrapper(
     private val dataStore: DataStore<Preferences>,
     externalCoroutineScope: CoroutineScope,
     private val stringPreferenceDefault: String = "",
