@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -28,6 +29,10 @@ class PreferencesDataStoreWrapperTest {
     private lateinit var testCoroutineScope: CoroutineScope
     private lateinit var preferencesDataStoreWrapper: PreferencesDataStoreWrapper
 
+    private val stringPreferenceDefault: String = ""
+    private val booleanPreferenceDefault: Boolean = false
+    private val intPreferenceDefault: Int = 0
+
     @Before
     fun setup() {
         val testContext: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -35,45 +40,56 @@ class PreferencesDataStoreWrapperTest {
         preferencesDataStoreWrapper = PreferencesDataStoreWrapper(
             dataStore = testContext.dataStore,
             externalCoroutineScope = testCoroutineScope,
+            prefKeyString = "keyString",
+            prefKeyBoolean = "keyBoolean",
+            prefKeyInt = "keyInt",
+            stringPreferenceDefault = stringPreferenceDefault,
+            booleanPreferenceDefault = booleanPreferenceDefault,
+            intPreferenceDefault = intPreferenceDefault,
         )
     }
 
     @Test
     fun testUpdateStringPreference() {
         testCoroutineScope.launch {
-            preferencesDataStoreWrapper.updateStringPreference("Test String")
-            assert(preferencesDataStoreWrapper.stringPreference.value == "Test String")
+            val newValue = "newString"
+            preferencesDataStoreWrapper.updateStringPreference(newValue)
+            assertEquals(newValue, preferencesDataStoreWrapper.stringPreference.value)
         }
     }
 
     @Test
     fun testUpdateBooleanPreference() {
         testCoroutineScope.launch {
-            preferencesDataStoreWrapper.updateBooleanPreference(true)
-            assert(preferencesDataStoreWrapper.booleanPreference.value)
+            val newValue = true
+            preferencesDataStoreWrapper.updateBooleanPreference(newValue)
+            assertEquals(newValue, preferencesDataStoreWrapper.booleanPreference.value)
         }
     }
 
     @Test
     fun testUpdateIntPreference() {
         testCoroutineScope.launch {
-            preferencesDataStoreWrapper.updateIntPreference(42)
-            assert(preferencesDataStoreWrapper.intPreference.value == 42)
+            val newValue = 42
+            preferencesDataStoreWrapper.updateIntPreference(newValue)
+            assertEquals(newValue, preferencesDataStoreWrapper.intPreference.value)
         }
     }
 
     @Test
     fun testClear() {
         testCoroutineScope.launch {
-            preferencesDataStoreWrapper.updateStringPreference("Test String")
-            preferencesDataStoreWrapper.updateBooleanPreference(true)
-            preferencesDataStoreWrapper.updateIntPreference(42)
+            with(preferencesDataStoreWrapper) {
+                updateStringPreference("Test String")
+                updateBooleanPreference(true)
+                updateIntPreference(42)
 
-            preferencesDataStoreWrapper.clear()
+                clear()
 
-            assert(preferencesDataStoreWrapper.stringPreference.value == "")
-            assert(preferencesDataStoreWrapper.booleanPreference.value == false)
-            assert(preferencesDataStoreWrapper.intPreference.value == 0)
+                assertEquals(stringPreferenceDefault, stringPreference.value)
+                assertEquals(booleanPreferenceDefault, booleanPreference.value)
+                assertEquals(intPreferenceDefault, intPreference.value)
+            }
         }
     }
 }

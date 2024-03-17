@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class SharedPreferencesWrapper(
     private val sharedPreferences: SharedPreferences,
+    private val prefKeyString: String,
+    private val prefKeyBoolean: String,
+    private val prefKeyInt: String,
     private val stringPreferenceDefault: String = "",
     private val booleanPreferenceDefault: Boolean = false,
     private val intPreferenceDefault: Int = 0,
@@ -30,28 +33,32 @@ class SharedPreferencesWrapper(
     private val _preferenceErrors = MutableSharedFlow<Throwable>()
     override val preferenceErrors = _preferenceErrors.asSharedFlow()
 
-    init {
-        sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPref, key ->
-            when (key) {
-                PREF_KEY_STRING -> {
-                    _stringPreference.value = sharedPref.getString(PREF_KEY_STRING, null) ?: stringPreferenceDefault
-                }
+    // The preference manager does not currently store a strong reference to the listener. You must store a strong reference to the listener, or it will be susceptible to garbage collection.
+    // Note: This callback will not be triggered when preferences are cleared via Editor#clear(), unless targeting android.os.Build.VERSION_CODES#R on devices running OS versions Android R or later.
+    private val onSharedPreferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPref, key ->
+        when (key) {
+            prefKeyString -> {
+                _stringPreference.value = sharedPref.getString(prefKeyString, null) ?: stringPreferenceDefault
+            }
 
-                PREF_KEY_BOOLEAN -> {
-                    _booleanPreference.value = sharedPref.getBoolean(PREF_KEY_BOOLEAN, booleanPreferenceDefault)
-                }
+            prefKeyBoolean -> {
+                _booleanPreference.value = sharedPref.getBoolean(prefKeyBoolean, booleanPreferenceDefault)
+            }
 
-                PREF_KEY_INT -> {
-                    _intPreference.value = sharedPref.getInt(PREF_KEY_INT, intPreferenceDefault)
-                }
+            prefKeyInt -> {
+                _intPreference.value = sharedPref.getInt(prefKeyInt, intPreferenceDefault)
             }
         }
+    }
+
+    init {
+        sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
     }
 
     override suspend fun updateStringPreference(newValue: String) {
         try {
             sharedPreferences.edit()
-                .putString(PREF_KEY_STRING, newValue)
+                .putString(prefKeyString, newValue)
                 .apply()
         } catch (e: Throwable) {
             _preferenceErrors.emit(e)
@@ -61,7 +68,7 @@ class SharedPreferencesWrapper(
     override suspend fun updateBooleanPreference(newValue: Boolean) {
         try {
             sharedPreferences.edit()
-                .putBoolean(PREF_KEY_BOOLEAN, newValue)
+                .putBoolean(prefKeyBoolean, newValue)
                 .apply()
         } catch (e: Throwable) {
             _preferenceErrors.emit(e)
@@ -71,7 +78,7 @@ class SharedPreferencesWrapper(
     override suspend fun updateIntPreference(newValue: Int) {
         try {
             sharedPreferences.edit()
-                .putInt(PREF_KEY_INT, newValue)
+                .putInt(prefKeyInt, newValue)
                 .apply()
         } catch (e: Throwable) {
             _preferenceErrors.emit(e)
@@ -80,9 +87,14 @@ class SharedPreferencesWrapper(
 
     override suspend fun clear() {
         try {
+            val existingKeys = sharedPreferences.all.keys
             sharedPreferences.edit()
                 .clear()
                 .apply()
+
+            for (key in existingKeys) {
+                onSharedPreferenceChangeListener.onSharedPreferenceChanged(sharedPreferences, key)
+            }
         } catch (e: Throwable) {
             _preferenceErrors.emit(e)
         }

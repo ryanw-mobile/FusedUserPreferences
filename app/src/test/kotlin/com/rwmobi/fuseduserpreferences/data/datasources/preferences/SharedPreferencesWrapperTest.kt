@@ -7,10 +7,6 @@ package com.rwmobi.fuseduserpreferences.data.datasources.preferences
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
-import com.rwmobi.fuseduserpreferences.data.datasources.preferences.PREF_KEY_BOOLEAN
-import com.rwmobi.fuseduserpreferences.data.datasources.preferences.PREF_KEY_INT
-import com.rwmobi.fuseduserpreferences.data.datasources.preferences.PREF_KEY_STRING
-import com.rwmobi.fuseduserpreferences.data.datasources.preferences.SharedPreferencesWrapper
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -28,54 +24,57 @@ class SharedPreferencesWrapperTest {
     private lateinit var sharedPreferencesWrapper: SharedPreferencesWrapper
     private lateinit var sharedPreferences: SharedPreferences
 
+    private val stringPreferenceDefault: String = ""
+    private val booleanPreferenceDefault: Boolean = false
+    private val intPreferenceDefault: Int = 0
+
     @Before
     fun setUp() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         sharedPreferences = context.getSharedPreferences("test_prefs", Context.MODE_PRIVATE)
-        sharedPreferencesWrapper = SharedPreferencesWrapper(sharedPreferences)
+        sharedPreferencesWrapper = SharedPreferencesWrapper(
+            sharedPreferences = sharedPreferences,
+            prefKeyString = "keyString",
+            prefKeyBoolean = "keyBoolean",
+            prefKeyInt = "keyInt",
+            stringPreferenceDefault = stringPreferenceDefault,
+            booleanPreferenceDefault = booleanPreferenceDefault,
+            intPreferenceDefault = intPreferenceDefault,
+        )
     }
 
     @Test
     fun `verify string preference update`() = runTest {
         val newValue = "newString"
         sharedPreferencesWrapper.updateStringPreference(newValue)
-
-        assertEquals(newValue, sharedPreferences.getString(PREF_KEY_STRING, null))
+        assertEquals(newValue, sharedPreferencesWrapper.stringPreference.value)
     }
 
     @Test
     fun `verify boolean preference update`() = runTest {
         val newValue = true
         sharedPreferencesWrapper.updateBooleanPreference(newValue)
-
-        assertEquals(newValue, sharedPreferences.getBoolean(PREF_KEY_BOOLEAN, false))
+        assertEquals(newValue, sharedPreferencesWrapper.booleanPreference.value)
     }
 
     @Test
     fun `verify int preference update`() = runTest {
         val newValue = 42
         sharedPreferencesWrapper.updateIntPreference(newValue)
-
-        assertEquals(newValue, sharedPreferences.getInt(PREF_KEY_INT, 0))
+        assertEquals(newValue, sharedPreferencesWrapper.intPreference.value)
     }
 
     @Test
     fun `verify preferences are cleared`() = runTest {
-        // Setup initial values
-        with(sharedPreferences.edit()) {
-            putString(PREF_KEY_STRING, "string")
-            putBoolean(PREF_KEY_BOOLEAN, true)
-            putInt(PREF_KEY_INT, 1)
-            commit()
-        }
+        with(sharedPreferencesWrapper) {
+            updateStringPreference("string")
+            updateBooleanPreference(true)
+            updateIntPreference(1)
+            clear()
 
-        // Clear preferences
-        sharedPreferencesWrapper.clear()
-
-        with(sharedPreferences) {
-            assertEquals("", getString(PREF_KEY_STRING, ""))
-            assertEquals(false, getBoolean(PREF_KEY_BOOLEAN, false))
-            assertEquals(0, getInt(PREF_KEY_INT, 0))
+            assertEquals(stringPreferenceDefault, stringPreference.value)
+            assertEquals(booleanPreferenceDefault, booleanPreference.value)
+            assertEquals(intPreferenceDefault, intPreference.value)
         }
     }
 }
