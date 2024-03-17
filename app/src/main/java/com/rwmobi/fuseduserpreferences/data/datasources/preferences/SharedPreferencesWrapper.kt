@@ -15,9 +15,9 @@ class SharedPreferencesWrapper(
     private val prefKeyString: String,
     private val prefKeyBoolean: String,
     private val prefKeyInt: String,
-    private val stringPreferenceDefault: String = "",
-    private val booleanPreferenceDefault: Boolean = false,
-    private val intPreferenceDefault: Int = 0,
+    private val stringPreferenceDefault: String,
+    private val booleanPreferenceDefault: Boolean,
+    private val intPreferenceDefault: Int,
 ) : Preferences {
 
     private val _stringPreference = MutableStateFlow(stringPreferenceDefault)

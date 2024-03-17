@@ -7,6 +7,9 @@ package com.rwmobi.fuseduserpreferences.data.datasources.preferences
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -40,9 +43,9 @@ class PreferencesDataStoreWrapperTest {
         preferencesDataStoreWrapper = PreferencesDataStoreWrapper(
             dataStore = testContext.dataStore,
             externalCoroutineScope = testCoroutineScope,
-            prefKeyString = "keyString",
-            prefKeyBoolean = "keyBoolean",
-            prefKeyInt = "keyInt",
+            prefKeyString = stringPreferencesKey("keyString"),
+            prefKeyBoolean = booleanPreferencesKey("keyBoolean"),
+            prefKeyInt = intPreferencesKey("keyInt"),
             stringPreferenceDefault = stringPreferenceDefault,
             booleanPreferenceDefault = booleanPreferenceDefault,
             intPreferenceDefault = intPreferenceDefault,

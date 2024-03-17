@@ -6,10 +6,7 @@ package com.rwmobi.fuseduserpreferences.data.datasources.preferences
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,17 +18,13 @@ import kotlinx.coroutines.launch
 class PreferencesDataStoreWrapper(
     private val dataStore: DataStore<Preferences>,
     externalCoroutineScope: CoroutineScope,
-    prefKeyString: String,
-    prefKeyBoolean: String,
-    prefKeyInt: String,
-    private val stringPreferenceDefault: String = "",
-    private val booleanPreferenceDefault: Boolean = false,
-    private val intPreferenceDefault: Int = 0,
+    private val prefKeyString: Preferences.Key<String>,
+    private val prefKeyBoolean: Preferences.Key<Boolean>,
+    private val prefKeyInt: Preferences.Key<Int>,
+    private val stringPreferenceDefault: String,
+    private val booleanPreferenceDefault: Boolean,
+    private val intPreferenceDefault: Int,
 ) : com.rwmobi.fuseduserpreferences.data.datasources.preferences.Preferences {
-    private val datastorePrefKeyString = stringPreferencesKey(prefKeyString)
-    private val datastorePrefKeyBoolean = booleanPreferencesKey(prefKeyBoolean)
-    private val datastorePrefKeyInt = intPreferencesKey(prefKeyInt)
-
     private val _stringPreference = MutableStateFlow(stringPreferenceDefault)
     override val stringPreference = _stringPreference.asStateFlow()
 
@@ -50,9 +43,9 @@ class PreferencesDataStoreWrapper(
                 _preferenceErrors.emit(exception)
             }
                 .collect { prefs ->
-                    _stringPreference.value = prefs[datastorePrefKeyString] ?: stringPreferenceDefault
-                    _booleanPreference.value = prefs[datastorePrefKeyBoolean] ?: booleanPreferenceDefault
-                    _intPreference.value = prefs[datastorePrefKeyInt] ?: intPreferenceDefault
+                    _stringPreference.value = prefs[prefKeyString] ?: stringPreferenceDefault
+                    _booleanPreference.value = prefs[prefKeyBoolean] ?: booleanPreferenceDefault
+                    _intPreference.value = prefs[prefKeyInt] ?: intPreferenceDefault
                 }
         }
     }
@@ -60,7 +53,7 @@ class PreferencesDataStoreWrapper(
     override suspend fun updateStringPreference(newValue: String) {
         try {
             dataStore.edit { mutablePreferences ->
-                mutablePreferences[datastorePrefKeyString] = newValue
+                mutablePreferences[prefKeyString] = newValue
             }
         } catch (e: Throwable) {
             _preferenceErrors.emit(e)
@@ -70,7 +63,7 @@ class PreferencesDataStoreWrapper(
     override suspend fun updateBooleanPreference(newValue: Boolean) {
         try {
             dataStore.edit { mutablePreferences ->
-                mutablePreferences[datastorePrefKeyBoolean] = newValue
+                mutablePreferences[prefKeyBoolean] = newValue
             }
         } catch (e: Throwable) {
             _preferenceErrors.emit(e)
@@ -80,7 +73,7 @@ class PreferencesDataStoreWrapper(
     override suspend fun updateIntPreference(newValue: Int) {
         try {
             dataStore.edit { mutablePreferences ->
-                mutablePreferences[datastorePrefKeyInt] = newValue
+                mutablePreferences[prefKeyInt] = newValue
             }
         } catch (e: Throwable) {
             _preferenceErrors.emit(e)
