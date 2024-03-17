@@ -2,7 +2,7 @@
  * Copyright (c) 2024. Ryan Wong (hello@ryanwebmail.com)
  */
 
-package com.rwmobi.fuseduserpreferences.data.datasources.prefdatastore
+package com.rwmobi.fuseduserpreferences.data.datasources.preferences
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -10,10 +10,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.rwmobi.fuseduserpreferences.data.datasources.AppPreferences
-import com.rwmobi.fuseduserpreferences.data.datasources.PREF_KEY_BOOLEAN
-import com.rwmobi.fuseduserpreferences.data.datasources.PREF_KEY_INT
-import com.rwmobi.fuseduserpreferences.data.datasources.PREF_KEY_STRING
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,13 +18,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class PreferenceDataStoreWrapper(
+class PreferencesDataStoreWrapper(
     private val dataStore: DataStore<Preferences>,
     externalCoroutineScope: CoroutineScope,
     private val stringPreferenceDefault: String = "",
     private val booleanPreferenceDefault: Boolean = false,
     private val intPreferenceDefault: Int = 0,
-) : AppPreferences {
+) : com.rwmobi.fuseduserpreferences.data.datasources.preferences.Preferences {
     private val _stringPreference = MutableStateFlow(stringPreferenceDefault)
     override val stringPreference = _stringPreference.asStateFlow()
 

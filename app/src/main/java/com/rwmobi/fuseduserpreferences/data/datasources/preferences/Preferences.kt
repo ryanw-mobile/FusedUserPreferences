@@ -2,7 +2,7 @@
  * Copyright (c) 2024. Ryan Wong (hello@ryanwebmail.com)
  */
 
-package com.rwmobi.fuseduserpreferences.data.datasources
+package com.rwmobi.fuseduserpreferences.data.datasources.preferences
 
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,7 +11,7 @@ const val PREF_KEY_STRING = "keyString"
 const val PREF_KEY_BOOLEAN = "keyBoolean"
 const val PREF_KEY_INT = "keyInt"
 
-interface AppPreferences {
+interface Preferences {
 
     val stringPreference: StateFlow<String>
     val booleanPreference: StateFlow<Boolean>
