@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,28 +38,42 @@ class PreferenceScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch(dispatcher) {
-            userPreferencesRepository.stringPreference.collect { stringPreference ->
+            userPreferencesRepository.booleanPreference.collect { booleanPreference ->
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
-                        stringPreference = stringPreference,
-                        isLoading = setOf(stringPreference, currentUiState.booleanPreference, currentUiState.intPreference).contains(null),
+                        booleanPreference = booleanPreference,
+                        isLoading = setOf(booleanPreference, currentUiState.stringPreference, currentUiState.intPreference).contains(null),
                     )
                 }
             }
         }
 
         viewModelScope.launch(dispatcher) {
-            userPreferencesRepository.stringPreference.collect { stringPreference ->
+            userPreferencesRepository.intPreference.collect { intPreference ->
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
-                        stringPreference = stringPreference,
-                        isLoading = setOf(stringPreference, currentUiState.booleanPreference, currentUiState.intPreference).contains(null),
+                        intPreference = intPreference,
+                        isLoading = setOf(intPreference, currentUiState.booleanPreference, currentUiState.stringPreference).contains(null),
+                    )
+                }
+            }
+        }
+
+        viewModelScope.launch(dispatcher) {
+            userPreferencesRepository.preferenceErrors.collect { preferenceErrors ->
+                _uiState.update { currentUiState ->
+                    val errorMessages = currentUiState.errorMessages + ErrorMessage(
+                        id = UUID.randomUUID().mostSignificantBits,
+                        message = preferenceErrors.localizedMessage ?: "unknown error",
+                    )
+                    currentUiState.copy(
+                        isLoading = false,
+                        errorMessages = errorMessages,
                     )
                 }
             }
         }
     }
-
 
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->

@@ -5,14 +5,22 @@
 package com.rwmobi.fuseduserpreferences.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -23,46 +31,67 @@ import androidx.compose.ui.unit.dp
 import com.rwmobi.fuseduserpreferences.ui.components.BooleanSwitch
 import com.rwmobi.fuseduserpreferences.ui.components.IntegerSlider
 import com.rwmobi.fuseduserpreferences.ui.components.StringTextField
+import com.rwmobi.fuseduserpreferences.ui.viewmodels.PreferenceScreenUIEvent
+import com.rwmobi.fuseduserpreferences.ui.viewmodels.PreferenceScreenUIState
 
 @Composable
 fun PreferenceScreen(
     modifier: Modifier = Modifier,
-    text: String,
-    onTextfieldValueChange: ((String) -> Unit),
-    switchChecked: Boolean,
-    onCheckChange: ((Boolean) -> Unit),
-    sliderPosition: Float,
-    onSliderValueChange: ((Float) -> Unit),
+    uiState: PreferenceScreenUIState,
+    uiEvent: PreferenceScreenUIEvent,
 ) {
-    Column(
-        modifier = modifier
-            .verticalScroll(
-                state = rememberScrollState(),
-                enabled = true,
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = modifier
+                .verticalScroll(
+                    state = rememberScrollState(),
+                    enabled = true,
+                )
+                .padding(all = 32.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
+        ) {
+            StringTextField(
+                modifier = Modifier.fillMaxWidth(),
+                label = "Stored value = ${uiState.stringPreference}",
+                value = uiState.stringPreference ?: "",
+                onValueChange = uiEvent.onUpdateStringPreference,
             )
-            .padding(all = 32.dp),
-        verticalArrangement = Arrangement.SpaceEvenly,
-    ) {
-        StringTextField(
-            modifier = Modifier.fillMaxWidth(),
-            label = "Stored value = $text",
-            value = text,
-            onValueChange = onTextfieldValueChange,
-        )
 
-        BooleanSwitch(
-            modifier = Modifier.fillMaxWidth(),
-            label = "Stored value = $switchChecked",
-            checked = switchChecked,
-            onCheckedChange = onCheckChange,
-        )
+            BooleanSwitch(
+                modifier = Modifier.fillMaxWidth(),
+                label = "Stored value = ${uiState.booleanPreference}",
+                checked = uiState.booleanPreference ?: false,
+                onCheckedChange = uiEvent.onUpdateBooleanPreference,
+            )
 
-        IntegerSlider(
-            modifier = Modifier.fillMaxWidth(),
-            label = "Stored value = $sliderPosition",
-            sliderPosition = sliderPosition,
-            onSliderValueChange = onSliderValueChange,
+            IntegerSlider(
+                modifier = Modifier.fillMaxWidth(),
+                label = "Stored value = ${uiState.intPreference}",
+                sliderPosition = (uiState.intPreference ?: 0) / 100.0f,
+                onSliderValueChange = uiEvent.onUpdateIntPreference,
+            )
+        }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter),
         )
+    }
+
+    if (uiState.errorMessages.isNotEmpty()) {
+        val errorMessage = remember(uiState) { uiState.errorMessages[0] }
+        val errorMessageText = errorMessage.message
+        val actionLabel = stringResource(android.R.string.ok)
+
+        LaunchedEffect(errorMessage.id) {
+            snackbarHostState.showSnackbar(
+                message = errorMessageText,
+                actionLabel = actionLabel,
+            )
+            uiEvent.onErrorShown(errorMessage.id)
+        }
     }
 }
 
@@ -79,12 +108,18 @@ private fun PreferenceScreenPreview(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(all = 16.dp),
-            text = "",
-            onTextfieldValueChange = {},
-            switchChecked = false,
-            onCheckChange = {},
-            sliderPosition = 0f,
-            onSliderValueChange = {},
+            uiState = PreferenceScreenUIState(
+                isLoading = false,
+                stringPreference = text,
+                booleanPreference = true,
+                intPreference = 50,
+            ),
+            uiEvent = PreferenceScreenUIEvent(
+                onErrorShown = {},
+                onUpdateStringPreference = {},
+                onUpdateBooleanPreference = {},
+                onUpdateIntPreference = {},
+            ),
         )
     }
 }

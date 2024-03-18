@@ -27,7 +27,7 @@ fun IntegerSlider(
     modifier: Modifier = Modifier,
     label: String?,
     sliderPosition: Float,
-    onSliderValueChange: ((Float) -> Unit),
+    onSliderValueChange: ((Int) -> Unit),
 ) {
     Column(
         modifier = modifier,
@@ -48,7 +48,7 @@ fun IntegerSlider(
                 .padding(vertical = 8.dp)
                 .defaultMinSize(minHeight = 48.dp),
             value = sliderPosition,
-            onValueChange = onSliderValueChange,
+            onValueChange = { newValue -> onSliderValueChange((newValue * 100).toInt()) },
         )
     }
 }

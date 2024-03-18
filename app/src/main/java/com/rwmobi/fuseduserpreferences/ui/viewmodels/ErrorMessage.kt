@@ -4,6 +4,4 @@
 
 package com.rwmobi.fuseduserpreferences.ui.viewmodels
 
-import androidx.annotation.StringRes
-
-data class ErrorMessage(val id: Long, @StringRes val messageId: Int)
+data class ErrorMessage(val id: Long, val message: String)
