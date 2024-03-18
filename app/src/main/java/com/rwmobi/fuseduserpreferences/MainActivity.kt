@@ -8,9 +8,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.rwmobi.fuseduserpreferences.ui.screens.PreferenceScreen
 import com.rwmobi.fuseduserpreferences.ui.theme.FusedUserPreferencesTheme
 
@@ -25,7 +27,15 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background,
                 ) {
                     PreferenceScreen(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(all = 16.dp),
+                        text = "",
+                        onTextfieldValueChange = {},
+                        switchChecked = false,
+                        onCheckChange = {},
+                        sliderPosition = 0f,
+                        onSliderValueChange = {},
                     )
                 }
             }

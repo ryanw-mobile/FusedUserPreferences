@@ -14,16 +14,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 
 @Composable
-@PreviewScreenSizes
 fun IntegerSlider(
     modifier: Modifier = Modifier,
-    label: String? = "223",
-    sliderPosition: Float = 0f,
-    onSliderValueChange: ((Float) -> Unit) = {},
+    label: String?,
+    sliderPosition: Float,
+    onSliderValueChange: ((Float) -> Unit),
 ) {
     Column(
         modifier = modifier,
@@ -33,6 +37,7 @@ fun IntegerSlider(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMedium,
+                maxLines = 1,
                 text = it,
             )
         }
@@ -44,6 +49,26 @@ fun IntegerSlider(
                 .defaultMinSize(minHeight = 48.dp),
             value = sliderPosition,
             onValueChange = onSliderValueChange,
+        )
+    }
+}
+
+@PreviewLightDark
+@PreviewDynamicColors
+@PreviewFontScale
+@PreviewScreenSizes
+@Composable
+private fun IntegerSliderPreview(
+    @PreviewParameter(LoremIpsum::class) text: String,
+) {
+    MaterialTheme {
+        IntegerSlider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 16.dp),
+            label = text,
+            sliderPosition = 50f,
+            onSliderValueChange = {},
         )
     }
 }
