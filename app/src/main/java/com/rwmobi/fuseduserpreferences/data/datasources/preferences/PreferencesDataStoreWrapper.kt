@@ -17,13 +17,13 @@ import kotlinx.coroutines.launch
 
 class PreferencesDataStoreWrapper(
     private val dataStore: DataStore<Preferences>,
-    externalCoroutineScope: CoroutineScope,
     private val prefKeyString: Preferences.Key<String>,
     private val prefKeyBoolean: Preferences.Key<Boolean>,
     private val prefKeyInt: Preferences.Key<Int>,
     private val stringPreferenceDefault: String,
     private val booleanPreferenceDefault: Boolean,
     private val intPreferenceDefault: Int,
+    externalCoroutineScope: CoroutineScope,
 ) : com.rwmobi.fuseduserpreferences.data.datasources.preferences.Preferences {
     private val _stringPreference = MutableStateFlow(stringPreferenceDefault)
     override val stringPreference = _stringPreference.asStateFlow()
