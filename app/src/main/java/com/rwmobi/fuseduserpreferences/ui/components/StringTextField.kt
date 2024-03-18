@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import com.rwmobi.fuseduserpreferences.ui.theme.FusedUserPreferencesTheme
 
 @Composable
 fun StringTextField(
@@ -63,7 +64,7 @@ fun StringTextField(
 private fun StringTextFieldPreview(
     @PreviewParameter(LoremIpsum::class) text: String,
 ) {
-    MaterialTheme {
+    FusedUserPreferencesTheme {
         StringTextField(
             modifier = Modifier
                 .fillMaxWidth()

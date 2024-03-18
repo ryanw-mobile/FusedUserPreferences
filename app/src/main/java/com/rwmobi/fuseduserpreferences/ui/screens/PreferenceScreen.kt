@@ -12,15 +12,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -28,9 +31,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import com.rwmobi.fuseduserpreferences.domain.DefaultValues
 import com.rwmobi.fuseduserpreferences.ui.components.BooleanSwitch
 import com.rwmobi.fuseduserpreferences.ui.components.IntegerSlider
 import com.rwmobi.fuseduserpreferences.ui.components.StringTextField
+import com.rwmobi.fuseduserpreferences.ui.theme.FusedUserPreferencesTheme
 import com.rwmobi.fuseduserpreferences.ui.viewmodels.PreferenceScreenUIEvent
 import com.rwmobi.fuseduserpreferences.ui.viewmodels.PreferenceScreenUIState
 
@@ -39,6 +44,9 @@ fun PreferenceScreen(
     modifier: Modifier = Modifier,
     uiState: PreferenceScreenUIState,
     uiEvent: PreferenceScreenUIEvent,
+    stringPreferenceDefault: String,
+    booleanPreferenceDefault: Boolean,
+    intPreferenceDefault: Int,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -55,23 +63,34 @@ fun PreferenceScreen(
             StringTextField(
                 modifier = Modifier.fillMaxWidth(),
                 label = "Stored value = ${uiState.stringPreference}",
-                value = uiState.stringPreference ?: "",
+                value = uiState.stringPreference ?: stringPreferenceDefault,
                 onValueChange = uiEvent.onUpdateStringPreference,
             )
 
             BooleanSwitch(
                 modifier = Modifier.fillMaxWidth(),
                 label = "Stored value = ${uiState.booleanPreference}",
-                checked = uiState.booleanPreference ?: false,
+                checked = uiState.booleanPreference ?: booleanPreferenceDefault,
                 onCheckedChange = uiEvent.onUpdateBooleanPreference,
             )
 
             IntegerSlider(
                 modifier = Modifier.fillMaxWidth(),
                 label = "Stored value = ${uiState.intPreference}",
-                sliderPosition = (uiState.intPreference ?: 0) / 100.0f,
+                sliderPosition = (uiState.intPreference ?: intPreferenceDefault) / 100.0f,
                 onSliderValueChange = uiEvent.onUpdateIntPreference,
             )
+
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = uiEvent.onClearPreference,
+            ) {
+                Text(
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.labelMedium,
+                    text = "Clear",
+                )
+            }
         }
 
         SnackbarHost(
@@ -103,7 +122,7 @@ fun PreferenceScreen(
 private fun PreferenceScreenPreview(
     @PreviewParameter(LoremIpsum::class) text: String,
 ) {
-    MaterialTheme {
+    FusedUserPreferencesTheme {
         PreferenceScreen(
             modifier = Modifier
                 .fillMaxWidth()
@@ -119,7 +138,11 @@ private fun PreferenceScreenPreview(
                 onUpdateStringPreference = {},
                 onUpdateBooleanPreference = {},
                 onUpdateIntPreference = {},
+                onClearPreference = {},
             ),
+            stringPreferenceDefault = DefaultValues.STRING_PREFERENCE,
+            booleanPreferenceDefault = DefaultValues.BOOLEAN_PREFERENCE,
+            intPreferenceDefault = DefaultValues.INT_PREFERENCE,
         )
     }
 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import com.rwmobi.fuseduserpreferences.ui.theme.FusedUserPreferencesTheme
 
 @Composable
 fun BooleanSwitch(
@@ -61,7 +62,7 @@ fun BooleanSwitch(
 private fun BooleanSwitchPreview(
     @PreviewParameter(LoremIpsum::class) text: String,
 ) {
-    MaterialTheme {
+    FusedUserPreferencesTheme {
         BooleanSwitch(
             modifier = Modifier
                 .fillMaxWidth()

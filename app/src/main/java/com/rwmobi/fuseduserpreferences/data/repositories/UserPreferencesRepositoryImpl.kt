@@ -5,17 +5,16 @@
 package com.rwmobi.fuseduserpreferences.data.repositories
 
 import com.rwmobi.fuseduserpreferences.data.datasources.preferences.Preferences
+import com.rwmobi.fuseduserpreferences.di.DispatcherModule
 import com.rwmobi.fuseduserpreferences.domain.repositories.UserPreferencesRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 
 // This looks a bit redundant, but ChatGPT says this confirms to the Clean Architecture
-class UserPreferencesRepositoryImpl(private val preferences: Preferences) : UserPreferencesRepository {
-
-//    private val PREF_KEY_STRING = "keyString"
-//    private val PREF_KEY_BOOLEAN = "keyBoolean"
-//    private val PREF_KEY_INT = "keyInt"
-//    private val stringPreferenceDefault: String = ""
-//    private val booleanPreferenceDefault: Boolean = false
-//    private val intPreferenceDefault: Int = 0
+class UserPreferencesRepositoryImpl(
+    private val preferences: Preferences,
+    @DispatcherModule.IoDispatcher private val dispatcher: CoroutineDispatcher,
+) : UserPreferencesRepository {
 
     override val stringPreference = preferences.stringPreference
     override val booleanPreference = preferences.booleanPreference
@@ -23,18 +22,26 @@ class UserPreferencesRepositoryImpl(private val preferences: Preferences) : User
     override val preferenceErrors = preferences.preferenceErrors
 
     override suspend fun updateStringPreference(newValue: String) {
-        preferences.updateStringPreference(newValue)
+        withContext(dispatcher) {
+            preferences.updateStringPreference(newValue)
+        }
     }
 
     override suspend fun updateBooleanPreference(newValue: Boolean) {
-        preferences.updateBooleanPreference(newValue)
+        withContext(dispatcher) {
+            preferences.updateBooleanPreference(newValue)
+        }
     }
 
     override suspend fun updateIntPreference(newValue: Int) {
-        preferences.updateIntPreference(newValue)
+        withContext(dispatcher) {
+            preferences.updateIntPreference(newValue)
+        }
     }
 
     override suspend fun clear() {
-        preferences.clear()
+        withContext(dispatcher) {
+            preferences.clear()
+        }
     }
 }

@@ -28,7 +28,7 @@ private const val TEST_DATASTORE_NAME: String = "test_datastore"
 @RunWith(AndroidJUnit4::class)
 class PreferencesDataStoreWrapperTest {
     // Reference: https://medium.com/androiddevelopers/datastore-and-testing-edf7ae8df3d8
-    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = TEST_DATASTORE_NAME)
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = TEST_DATASTORE_NAME)
     private lateinit var testCoroutineScope: CoroutineScope
     private lateinit var preferencesDataStoreWrapper: PreferencesDataStoreWrapper
 

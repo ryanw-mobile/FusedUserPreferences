@@ -9,4 +9,5 @@ data class PreferenceScreenUIEvent(
     val onUpdateStringPreference: (newValue: String) -> Unit,
     val onUpdateBooleanPreference: (newValue: Boolean) -> Unit,
     val onUpdateIntPreference: (newValue: Int) -> Unit,
+    val onClearPreference: () -> Unit,
 )

@@ -184,6 +184,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.junit.ktx)
     implementation(libs.timber)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     testImplementation(libs.junit)
     testImplementation(libs.junit.vintage.engine)
     testImplementation(libs.kotlinx.coroutines.test)

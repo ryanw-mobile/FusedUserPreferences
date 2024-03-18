@@ -7,6 +7,7 @@ package com.rwmobi.fuseduserpreferences.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rwmobi.fuseduserpreferences.di.DispatcherModule
+import com.rwmobi.fuseduserpreferences.di.SharedPreferences
 import com.rwmobi.fuseduserpreferences.domain.repositories.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,12 +15,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class PreferenceScreenViewModel @Inject constructor(
-    private val userPreferencesRepository: UserPreferencesRepository,
+class SharedPreferenceScreenViewModel @Inject constructor(
+    @SharedPreferences private val userPreferencesRepository: UserPreferencesRepository,
     @DispatcherModule.MainDispatcher private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PreferenceScreenUIState())
@@ -61,6 +63,8 @@ class PreferenceScreenViewModel @Inject constructor(
 
         viewModelScope.launch(dispatcher) {
             userPreferencesRepository.preferenceErrors.collect { preferenceErrors ->
+                Timber.e(preferenceErrors)
+
                 _uiState.update { currentUiState ->
                     val errorMessages = currentUiState.errorMessages + ErrorMessage(
                         id = UUID.randomUUID().mostSignificantBits,
@@ -79,6 +83,30 @@ class PreferenceScreenViewModel @Inject constructor(
         _uiState.update { currentUiState ->
             val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
             currentUiState.copy(errorMessages = errorMessages)
+        }
+    }
+
+    fun updateStringPreference(newValue: String) {
+        viewModelScope.launch {
+            userPreferencesRepository.updateStringPreference(newValue)
+        }
+    }
+
+    fun updateBooleanPreference(newValue: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.updateBooleanPreference(newValue)
+        }
+    }
+
+    fun updateIntPreference(newValue: Int) {
+        viewModelScope.launch {
+            userPreferencesRepository.updateIntPreference(newValue)
+        }
+    }
+
+    fun clearPreferences() {
+        viewModelScope.launch {
+            userPreferencesRepository.clear()
         }
     }
 }
