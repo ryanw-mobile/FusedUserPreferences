@@ -2,17 +2,12 @@
  * Copyright (c) 2024. Ryan Wong (hello@ryanwebmail.com)
  */
 
-package com.rwmobi.fuseduserpreferences.data.datasources
+package com.rwmobi.fuseduserpreferences.domain.repositories
 
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
-const val PREF_KEY_STRING = "keyString"
-const val PREF_KEY_BOOLEAN = "keyBoolean"
-const val PREF_KEY_INT = "keyInt"
-
-interface AppPreferences {
-
+interface UserPreferencesRepository {
     val stringPreference: StateFlow<String>
     val booleanPreference: StateFlow<Boolean>
     val intPreference: StateFlow<Int>
