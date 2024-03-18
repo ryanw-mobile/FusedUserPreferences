@@ -53,6 +53,11 @@ class SharedPreferencesWrapper(
 
     init {
         sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
+
+        // fetch existing values
+        _stringPreference.value = sharedPreferences.getString(prefKeyString, null) ?: stringPreferenceDefault
+        _booleanPreference.value = sharedPreferences.getBoolean(prefKeyBoolean, booleanPreferenceDefault)
+        _intPreference.value = sharedPreferences.getInt(prefKeyInt, intPreferenceDefault)
     }
 
     override suspend fun updateStringPreference(newValue: String) {
