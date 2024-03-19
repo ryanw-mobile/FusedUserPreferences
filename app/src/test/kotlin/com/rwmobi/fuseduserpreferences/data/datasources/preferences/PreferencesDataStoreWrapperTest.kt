@@ -15,6 +15,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
@@ -49,6 +50,7 @@ class PreferencesDataStoreWrapperTest {
             stringPreferenceDefault = stringPreferenceDefault,
             booleanPreferenceDefault = booleanPreferenceDefault,
             intPreferenceDefault = intPreferenceDefault,
+            dispatcher = Dispatchers.Unconfined,
         )
     }
 

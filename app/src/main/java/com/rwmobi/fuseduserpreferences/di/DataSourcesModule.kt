@@ -17,6 +17,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Singleton
 
@@ -29,6 +30,7 @@ object DataSourcesModule {
     fun providePreferencesDataStore(
         dataStore: DataStore<androidx.datastore.preferences.core.Preferences>,
         externalCoroutineScope: CoroutineScope,
+        @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
     ): Preferences {
         return PreferencesDataStoreWrapper(
             dataStore = dataStore,
@@ -39,6 +41,7 @@ object DataSourcesModule {
             booleanPreferenceDefault = DefaultValues.BOOLEAN_PREFERENCE,
             intPreferenceDefault = DefaultValues.INT_PREFERENCE,
             externalCoroutineScope = externalCoroutineScope,
+            dispatcher = dispatcher,
         )
     }
 
