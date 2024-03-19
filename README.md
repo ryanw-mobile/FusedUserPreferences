@@ -1,10 +1,15 @@
 # Fused User Preferences
 
+<p><img src="hero.jpg" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
+
 This is an experimental project that tries to put the legacy SharedPreferences and the new Jetpack
 Preferences Datastore side by side by means of dependency inversion to see how it would look if it
 were to provide the same preferences storage at the data layer.
 
-<p><img src="hero.jpg" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
+<p align="center">
+  <img src="Screenshot_1.png" width="200" />
+  <img src="Screenshot_2.png" width="200" />
+</p>
 
 ## Background
 
