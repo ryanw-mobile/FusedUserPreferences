@@ -29,7 +29,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PRE
 object AppModule {
     @Provides
     @Singleton
-    fun provideApplicationScope(@ApplicationContext context: Context): CoroutineScope {
+    fun provideApplicationScope(): CoroutineScope {
         return CoroutineScope(
             context = SupervisorJob() + Dispatchers.Default + CoroutineExceptionHandler { _, throwable ->
                 // Handle uncaught exceptions from this scope.

@@ -12,7 +12,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Qualifier
 
 @Qualifier
@@ -31,12 +30,8 @@ object RepositoryModule {
     @ViewModelScoped
     fun providePreferencesDataStoreRepository(
         @PreferencesDataStore preferences: Preferences,
-        @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
     ): UserPreferencesRepository {
-        return UserPreferencesRepositoryImpl(
-            preferences = preferences,
-            dispatcher = dispatcher,
-        )
+        return UserPreferencesRepositoryImpl(preferences = preferences)
     }
 
     @SharedPreferences
@@ -44,11 +39,7 @@ object RepositoryModule {
     @ViewModelScoped
     fun provideSharedPreferencesRepository(
         @SharedPreferences preferences: Preferences,
-        @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
     ): UserPreferencesRepository {
-        return UserPreferencesRepositoryImpl(
-            preferences = preferences,
-            dispatcher = dispatcher,
-        )
+        return UserPreferencesRepositoryImpl(preferences = preferences)
     }
 }

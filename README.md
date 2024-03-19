@@ -4,6 +4,8 @@ This is an experimental project that tries to put the legacy SharedPreferences a
 Preferences Datastore side by side by means of dependency inversion to see how it would look if it
 were to provide the same preferences storage at the data layer.
 
+<p><img src="hero.jpg" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
+
 ## Background
 
 In my first few Android apps, which date back to 2010, we did not have any architecture to follow.
@@ -26,10 +28,90 @@ observe preference changes, there is a known limitation: we are not being told w
 changed. We know only _something_ has changed, so we probably have to propagate _all_ the keys we
 are interested in, even if we know that only _one_ has changed.
 
+## The minimum code to make SharedPreferences work
+
+```
+private val sharedPref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+
+private val onPreferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPref, key ->
+    when (key) {
+        prefKeyString -> {
+            _stringPreference.value = sharedPref.getString(prefKeyString, null) ?: stringPreferenceDefault
+        }
+
+        prefKeyBoolean -> {
+            _booleanPreference.value = sharedPref.getBoolean(prefKeyBoolean, booleanPreferenceDefault)
+        }
+    }
+}
+
+init {
+    // If we want to keep track of the changes
+    sharedPref.registerOnSharedPreferenceChangeListener(onPreferenceChangeListener)
+}
+
+fun getStringPreference() = sharedPref.getString(prefKeyString, null) ?: "default-value"
+
+fun updateStringPreference(newValue: String) {
+  try {
+      sharedPref.edit()
+          .putString(prefKeyString, newValue)
+          .apply()
+  } catch (e: Throwable) {
+      // Not likely to produce exception though
+  }
+}
+
+```
+
+## The minimum code to make Jetpack Preferences Data Store work
+
+```
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "preferences")
+private val prefKeyStrings:Preferences.Key<String> = stringPreferencesKey("some-key-name")
+    
+init {
+    // assume caller passing in Context.dataStore as DataStore<Preferences>
+    externalCoroutineScope.launch(dispatcher) {
+        dataStore.data.catch { exception ->
+            _preferenceErrors.emit(exception)
+        }
+            .collect { prefs ->
+                // or use map 
+                _stringPreference.value = prefs[prefKeyString] ?: stringPreferenceDefault
+                _booleanPreference.value = prefs[prefKeyBoolean] ?: booleanPreferenceDefault
+                _intPreference.value = prefs[prefKeyInt] ?: intPreferenceDefault
+            }
+    }
+}
+
+suspend fun updateStringPreference(newValue: String) {
+    withContext(dispatcher) {
+        try {
+            dataStore.edit { mutablePreferences ->
+                mutablePreferences[prefKeyString] = newValue
+            }
+        } catch (e: Throwable) {
+            _preferenceErrors.emit(e)
+        }
+    }
+}
+```
+
 ## Approach
 
 Whether for SharedPreferences or Jetpack Preferences Datastore, even if the core is about 10 lines
 of code, this code project tries to put them in the right place when following the MVVM and Clean
-architecture. That means the UI will reach the ViewModel, which will then connect to a repository
+architecture. That means the UI will talk to the ViewModel, which will then connect to a repository
 that invisibly talks to either the SharedPreferences or the Jetpack Preferences Datastore data
-store.
+store. Dependency inversion with Dagger Hilt allows injecting different data sources (
+SharedPreferences and Jetpack Preferences Data Store) into the same repository. Usually in
+production apps it is not likely that we have a need to use both sources interchangeably.
+
+## Let's download and run it!
+
+This project was configured to build using Android Studio Iguana | 2023.2.1. You will need to have
+Java 17 to build the project.
+
+Alternatively, you can find the ready-to-install APKs and App Bundles under
+the [release section](https://github.com/ryanw-mobile/FusedUserPreferences/releases).
