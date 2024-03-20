@@ -29,51 +29,53 @@ class SharedPreferenceScreenViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(dispatcher) {
-            userPreferencesRepository.stringPreference.collect { stringPreference ->
-                _uiState.update { currentUiState ->
-                    currentUiState.copy(
-                        stringPreference = stringPreference,
-                        isLoading = setOf(stringPreference, currentUiState.booleanPreference, currentUiState.intPreference).contains(null),
-                    )
+            launch {
+                userPreferencesRepository.stringPreference.collect { stringPreference ->
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            stringPreference = stringPreference,
+                            isLoading = setOf(stringPreference, currentUiState.booleanPreference, currentUiState.intPreference).contains(null),
+                        )
+                    }
                 }
             }
-        }
 
-        viewModelScope.launch(dispatcher) {
-            userPreferencesRepository.booleanPreference.collect { booleanPreference ->
-                _uiState.update { currentUiState ->
-                    currentUiState.copy(
-                        booleanPreference = booleanPreference,
-                        isLoading = setOf(booleanPreference, currentUiState.stringPreference, currentUiState.intPreference).contains(null),
-                    )
+            launch {
+                userPreferencesRepository.booleanPreference.collect { booleanPreference ->
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            booleanPreference = booleanPreference,
+                            isLoading = setOf(booleanPreference, currentUiState.stringPreference, currentUiState.intPreference).contains(null),
+                        )
+                    }
                 }
             }
-        }
 
-        viewModelScope.launch(dispatcher) {
-            userPreferencesRepository.intPreference.collect { intPreference ->
-                _uiState.update { currentUiState ->
-                    currentUiState.copy(
-                        intPreference = intPreference,
-                        isLoading = setOf(intPreference, currentUiState.booleanPreference, currentUiState.stringPreference).contains(null),
-                    )
+            launch {
+                userPreferencesRepository.intPreference.collect { intPreference ->
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            intPreference = intPreference,
+                            isLoading = setOf(intPreference, currentUiState.booleanPreference, currentUiState.stringPreference).contains(null),
+                        )
+                    }
                 }
             }
-        }
 
-        viewModelScope.launch(dispatcher) {
-            userPreferencesRepository.preferenceErrors.collect { preferenceErrors ->
-                Timber.e(preferenceErrors)
+            launch {
+                userPreferencesRepository.preferenceErrors.collect { preferenceErrors ->
+                    Timber.e(preferenceErrors)
 
-                _uiState.update { currentUiState ->
-                    val errorMessages = currentUiState.errorMessages + ErrorMessage(
-                        id = UUID.randomUUID().mostSignificantBits,
-                        message = preferenceErrors.localizedMessage ?: "unknown error",
-                    )
-                    currentUiState.copy(
-                        isLoading = false,
-                        errorMessages = errorMessages,
-                    )
+                    _uiState.update { currentUiState ->
+                        val errorMessages = currentUiState.errorMessages + ErrorMessage(
+                            id = UUID.randomUUID().mostSignificantBits,
+                            message = preferenceErrors.localizedMessage ?: "unknown error",
+                        )
+                        currentUiState.copy(
+                            isLoading = false,
+                            errorMessages = errorMessages,
+                        )
+                    }
                 }
             }
         }
