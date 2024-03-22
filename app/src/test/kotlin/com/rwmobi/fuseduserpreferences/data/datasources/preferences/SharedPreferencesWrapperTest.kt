@@ -9,7 +9,6 @@ import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,9 +23,9 @@ class SharedPreferencesWrapperTest {
     private lateinit var sharedPreferencesWrapper: SharedPreferencesWrapper
     private lateinit var sharedPreferences: SharedPreferences
 
-    private val stringPreferenceDefault: String = ""
-    private val booleanPreferenceDefault: Boolean = false
-    private val intPreferenceDefault: Int = 0
+    private val prefKeyString: String = "keyString"
+    private val prefKeyBoolean: String = "keyBoolean"
+    private val prefKeyInt: String = "keyInt"
 
     @Before
     fun setUp() {
@@ -34,47 +33,93 @@ class SharedPreferencesWrapperTest {
         sharedPreferences = context.getSharedPreferences("test_prefs", Context.MODE_PRIVATE)
         sharedPreferencesWrapper = SharedPreferencesWrapper(
             sharedPreferences = sharedPreferences,
-            prefKeyString = "keyString",
-            prefKeyBoolean = "keyBoolean",
-            prefKeyInt = "keyInt",
-            stringPreferenceDefault = stringPreferenceDefault,
-            booleanPreferenceDefault = booleanPreferenceDefault,
-            intPreferenceDefault = intPreferenceDefault,
         )
     }
 
     @Test
-    fun `verify string preference update`() = runTest {
+    fun `verify string preference update`() {
         val newValue = "newString"
-        sharedPreferencesWrapper.updateStringPreference(newValue)
-        assertEquals(newValue, sharedPreferencesWrapper.stringPreference.value)
+        var callbackValue: String? = null
+        sharedPreferencesWrapper.registerOnSharedPreferenceChangeListener { sharedPref, key ->
+            if (key == prefKeyString) {
+                callbackValue = sharedPref.getString(prefKeyString, null)
+            }
+        }
+
+        sharedPreferencesWrapper.updateStringPreference(key = prefKeyString, newValue = newValue)
+
+        assertEquals(newValue, sharedPreferencesWrapper.getStringPreference(key = prefKeyString, defaultValue = "some-invalid-value"))
+        assertEquals(newValue, callbackValue)
     }
 
     @Test
-    fun `verify boolean preference update`() = runTest {
+    fun `verify boolean preference update`() {
         val newValue = true
-        sharedPreferencesWrapper.updateBooleanPreference(newValue)
-        assertEquals(newValue, sharedPreferencesWrapper.booleanPreference.value)
+        var callbackValue: Boolean? = null
+        sharedPreferencesWrapper.registerOnSharedPreferenceChangeListener { sharedPref, key ->
+            if (key == prefKeyBoolean) {
+                callbackValue = sharedPref.getBoolean(prefKeyBoolean, !newValue)
+            }
+        }
+
+        sharedPreferencesWrapper.updateBooleanPreference(key = prefKeyBoolean, newValue = newValue)
+
+        assertEquals(newValue, sharedPreferencesWrapper.getBooleanPreference(key = prefKeyBoolean, defaultValue = !newValue))
+        assertEquals(newValue, callbackValue)
     }
 
     @Test
-    fun `verify int preference update`() = runTest {
+    fun `verify int preference update`() {
         val newValue = 42
-        sharedPreferencesWrapper.updateIntPreference(newValue)
-        assertEquals(newValue, sharedPreferencesWrapper.intPreference.value)
+        var callbackValue: Int? = null
+        sharedPreferencesWrapper.registerOnSharedPreferenceChangeListener { sharedPref, key ->
+            if (key == prefKeyInt) {
+                callbackValue = sharedPref.getInt(prefKeyInt, -1)
+            }
+        }
+
+        sharedPreferencesWrapper.updateIntPreference(key = prefKeyInt, newValue = newValue)
+
+        assertEquals(newValue, sharedPreferencesWrapper.getIntPreference(key = prefKeyInt, defaultValue = -1))
+        assertEquals(newValue, callbackValue)
     }
 
     @Test
-    fun `verify preferences are cleared`() = runTest {
+    fun `verify preferences are cleared`() {
         with(sharedPreferencesWrapper) {
-            updateStringPreference("string")
-            updateBooleanPreference(true)
-            updateIntPreference(1)
+            var callbackValueString: String? = null
+            var callbackValueBoolean: Boolean? = true
+            var callbackValueInt: Int? = 1
+            val expectedString = "expected-default-string"
+            val expectedBoolean = false
+            val expectedInt = -1
+            registerOnSharedPreferenceChangeListener { sharedPref, key ->
+                when (key) {
+                    prefKeyString -> {
+                        callbackValueString = sharedPref.getString(prefKeyString, expectedString)
+                    }
+
+                    prefKeyBoolean -> {
+                        callbackValueBoolean = sharedPref.getBoolean(prefKeyBoolean, expectedBoolean)
+                    }
+
+                    prefKeyInt -> {
+                        callbackValueInt = sharedPref.getInt(prefKeyInt, expectedInt)
+                    }
+                }
+            }
+
+            updateStringPreference(key = prefKeyString, newValue = "some-invalid-value")
+            updateBooleanPreference(key = prefKeyBoolean, newValue = true)
+            updateIntPreference(key = prefKeyInt, newValue = 1)
             clear()
 
-            assertEquals(stringPreferenceDefault, stringPreference.value)
-            assertEquals(booleanPreferenceDefault, booleanPreference.value)
-            assertEquals(intPreferenceDefault, intPreference.value)
+            assertEquals(expectedString, sharedPreferencesWrapper.getStringPreference(key = prefKeyString, defaultValue = expectedString))
+            assertEquals(expectedString, callbackValueString)
+            assertEquals(expectedBoolean, sharedPreferencesWrapper.getBooleanPreference(key = prefKeyBoolean, defaultValue = expectedBoolean))
+            assertEquals(expectedBoolean, callbackValueBoolean)
+            assertEquals(expectedInt, sharedPreferencesWrapper.getIntPreference(key = prefKeyInt, defaultValue = expectedInt))
+            assertEquals(expectedInt, callbackValueInt)
         }
     }
 }
