@@ -18,20 +18,20 @@ class SharedPreferencesWrapper(
     private val stringPreferenceDefault: String,
     private val booleanPreferenceDefault: Boolean,
     private val intPreferenceDefault: Int,
-) : Preferences {
+) {
 
     private val _stringPreference = MutableStateFlow(stringPreferenceDefault)
-    override val stringPreference = _stringPreference.asStateFlow()
+    val stringPreference = _stringPreference.asStateFlow()
 
     private val _booleanPreference = MutableStateFlow(booleanPreferenceDefault)
-    override val booleanPreference = _booleanPreference.asStateFlow()
+    val booleanPreference = _booleanPreference.asStateFlow()
 
     private val _intPreference = MutableStateFlow(intPreferenceDefault)
-    override val intPreference = _intPreference.asStateFlow()
+    val intPreference = _intPreference.asStateFlow()
 
     // SharedPreferences operations do not typically throw exceptions in their standard use
     private val _preferenceErrors = MutableSharedFlow<Throwable>()
-    override val preferenceErrors = _preferenceErrors.asSharedFlow()
+    val preferenceErrors = _preferenceErrors.asSharedFlow()
 
     // The preference manager does not currently store a strong reference to the listener. You must store a strong reference to the listener, or it will be susceptible to garbage collection.
     // Note: This callback will not be triggered when preferences are cleared via Editor#clear(), unless targeting android.os.Build.VERSION_CODES#R on devices running OS versions Android R or later.
@@ -60,7 +60,7 @@ class SharedPreferencesWrapper(
         _intPreference.value = sharedPreferences.getInt(prefKeyInt, intPreferenceDefault)
     }
 
-    override suspend fun updateStringPreference(newValue: String) {
+    suspend fun updateStringPreference(newValue: String) {
         try {
             sharedPreferences.edit()
                 .putString(prefKeyString, newValue)
@@ -70,7 +70,7 @@ class SharedPreferencesWrapper(
         }
     }
 
-    override suspend fun updateBooleanPreference(newValue: Boolean) {
+    suspend fun updateBooleanPreference(newValue: Boolean) {
         try {
             sharedPreferences.edit()
                 .putBoolean(prefKeyBoolean, newValue)
@@ -80,7 +80,7 @@ class SharedPreferencesWrapper(
         }
     }
 
-    override suspend fun updateIntPreference(newValue: Int) {
+    suspend fun updateIntPreference(newValue: Int) {
         try {
             sharedPreferences.edit()
                 .putInt(prefKeyInt, newValue)
@@ -90,7 +90,7 @@ class SharedPreferencesWrapper(
         }
     }
 
-    override suspend fun clear() {
+    suspend fun clear() {
         try {
             val existingKeys = sharedPreferences.all.keys
             sharedPreferences.edit()

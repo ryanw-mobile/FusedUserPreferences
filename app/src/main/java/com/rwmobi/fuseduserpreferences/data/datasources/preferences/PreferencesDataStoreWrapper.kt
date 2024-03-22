@@ -28,18 +28,18 @@ class PreferencesDataStoreWrapper(
     private val intPreferenceDefault: Int,
     externalCoroutineScope: CoroutineScope,
     @DispatcherModule.IoDispatcher private val dispatcher: CoroutineDispatcher,
-) : com.rwmobi.fuseduserpreferences.data.datasources.preferences.Preferences {
+) {
     private val _stringPreference = MutableStateFlow(stringPreferenceDefault)
-    override val stringPreference = _stringPreference.asStateFlow()
+    val stringPreference = _stringPreference.asStateFlow()
 
     private val _booleanPreference = MutableStateFlow(booleanPreferenceDefault)
-    override val booleanPreference = _booleanPreference.asStateFlow()
+    val booleanPreference = _booleanPreference.asStateFlow()
 
     private val _intPreference = MutableStateFlow(intPreferenceDefault)
-    override val intPreference = _intPreference.asStateFlow()
+    val intPreference = _intPreference.asStateFlow()
 
     private val _preferenceErrors = MutableSharedFlow<Throwable>()
-    override val preferenceErrors = _preferenceErrors.asSharedFlow()
+    val preferenceErrors = _preferenceErrors.asSharedFlow()
 
     init {
         externalCoroutineScope.launch(dispatcher) {
@@ -54,7 +54,7 @@ class PreferencesDataStoreWrapper(
         }
     }
 
-    override suspend fun updateStringPreference(newValue: String) {
+    suspend fun updateStringPreference(newValue: String) {
         withContext(dispatcher) {
             try {
                 dataStore.edit { mutablePreferences ->
@@ -66,7 +66,7 @@ class PreferencesDataStoreWrapper(
         }
     }
 
-    override suspend fun updateBooleanPreference(newValue: Boolean) {
+    suspend fun updateBooleanPreference(newValue: Boolean) {
         withContext(dispatcher) {
             try {
                 dataStore.edit { mutablePreferences ->
@@ -78,7 +78,7 @@ class PreferencesDataStoreWrapper(
         }
     }
 
-    override suspend fun updateIntPreference(newValue: Int) {
+    suspend fun updateIntPreference(newValue: Int) {
         withContext(dispatcher) {
             try {
                 dataStore.edit { mutablePreferences ->
@@ -90,7 +90,7 @@ class PreferencesDataStoreWrapper(
         }
     }
 
-    override suspend fun clear() {
+    suspend fun clear() {
         withContext(dispatcher) {
             try {
                 dataStore.edit { mutablePreferences ->
