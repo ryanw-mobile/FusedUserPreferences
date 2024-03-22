@@ -4,8 +4,12 @@
 
 package com.rwmobi.fuseduserpreferences.di
 
-import com.rwmobi.fuseduserpreferences.data.datasources.preferences.Preferences
-import com.rwmobi.fuseduserpreferences.data.repositories.UserPreferencesRepositoryImpl
+import com.rwmobi.fuseduserpreferences.data.datasources.preferences.PreferencesDataStoreWrapper
+import com.rwmobi.fuseduserpreferences.data.datasources.preferences.SharedPreferencesWrapper
+import com.rwmobi.fuseduserpreferences.data.repositories.PreferencesDataStoreRepository
+import com.rwmobi.fuseduserpreferences.data.repositories.SharedPreferencesRepository
+import com.rwmobi.fuseduserpreferences.domain.DefaultValues
+import com.rwmobi.fuseduserpreferences.domain.PreferenceKeys
 import com.rwmobi.fuseduserpreferences.domain.repositories.UserPreferencesRepository
 import dagger.Module
 import dagger.Provides
@@ -29,17 +33,25 @@ object RepositoryModule {
     @Provides
     @ViewModelScoped
     fun providePreferencesDataStoreRepository(
-        @PreferencesDataStore preferences: Preferences,
+        preferenceDataStoreWrapper: PreferencesDataStoreWrapper,
     ): UserPreferencesRepository {
-        return UserPreferencesRepositoryImpl(preferences = preferences)
+        return PreferencesDataStoreRepository(preferenceDataStoreWrapper = preferenceDataStoreWrapper)
     }
 
     @SharedPreferences
     @Provides
     @ViewModelScoped
     fun provideSharedPreferencesRepository(
-        @SharedPreferences preferences: Preferences,
+        sharedPreferencesWrapper: SharedPreferencesWrapper,
     ): UserPreferencesRepository {
-        return UserPreferencesRepositoryImpl(preferences = preferences)
+        return SharedPreferencesRepository(
+            sharedPreferencesWrapper,
+            prefKeyString = PreferenceKeys.PREF_KEY_STRING,
+            prefKeyBoolean = PreferenceKeys.PREF_KEY_BOOLEAN,
+            prefKeyInt = PreferenceKeys.PREF_KEY_INT,
+            stringPreferenceDefault = DefaultValues.STRING_PREFERENCE,
+            booleanPreferenceDefault = DefaultValues.BOOLEAN_PREFERENCE,
+            intPreferenceDefault = DefaultValues.INT_PREFERENCE,
+        )
     }
 }
