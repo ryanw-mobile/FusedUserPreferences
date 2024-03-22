@@ -4,6 +4,9 @@
 
 package com.rwmobi.fuseduserpreferences.di
 
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.rwmobi.fuseduserpreferences.data.datasources.preferences.PreferencesDataStoreWrapper
 import com.rwmobi.fuseduserpreferences.data.datasources.preferences.SharedPreferencesWrapper
 import com.rwmobi.fuseduserpreferences.data.repositories.PreferencesDataStoreRepository
@@ -16,6 +19,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Qualifier
 
 @Qualifier
@@ -34,8 +39,20 @@ object RepositoryModule {
     @ViewModelScoped
     fun providePreferencesDataStoreRepository(
         preferenceDataStoreWrapper: PreferencesDataStoreWrapper,
+        externalCoroutineScope: CoroutineScope,
+        @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
     ): UserPreferencesRepository {
-        return PreferencesDataStoreRepository(preferenceDataStoreWrapper = preferenceDataStoreWrapper)
+        return PreferencesDataStoreRepository(
+            preferenceDataStoreWrapper = preferenceDataStoreWrapper,
+            prefKeyString = stringPreferencesKey(PreferenceKeys.PREF_KEY_STRING),
+            prefKeyBoolean = booleanPreferencesKey(PreferenceKeys.PREF_KEY_BOOLEAN),
+            prefKeyInt = intPreferencesKey(PreferenceKeys.PREF_KEY_INT),
+            stringPreferenceDefault = DefaultValues.STRING_PREFERENCE,
+            booleanPreferenceDefault = DefaultValues.BOOLEAN_PREFERENCE,
+            intPreferenceDefault = DefaultValues.INT_PREFERENCE,
+            externalCoroutineScope = externalCoroutineScope,
+            dispatcher = dispatcher,
+        )
     }
 
     @SharedPreferences
