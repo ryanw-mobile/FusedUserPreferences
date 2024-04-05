@@ -56,8 +56,8 @@ android {
         applicationId = "com.rwmobi.fuseduserpreferences"
         minSdk = libs.versions.minsdk.get().toInt()
         targetSdk = libs.versions.targetsdk.get().toInt()
-        versionCode = 3
-        versionName = "1.1.0"
+        versionCode = 4
+        versionName = "1.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
