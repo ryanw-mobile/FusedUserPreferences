@@ -62,15 +62,15 @@ class PreferencesDataStoreRepository(
     }
 
     override suspend fun updateStringPreference(newValue: String) {
-        preferenceDataStoreWrapper.updateStringPreference(key = prefKeyString, newValue = newValue)
+        preferenceDataStoreWrapper.updatePreference(key = prefKeyString, newValue = newValue)
     }
 
     override suspend fun updateBooleanPreference(newValue: Boolean) {
-        preferenceDataStoreWrapper.updateBooleanPreference(key = prefKeyBoolean, newValue = newValue)
+        preferenceDataStoreWrapper.updatePreference(key = prefKeyBoolean, newValue = newValue)
     }
 
     override suspend fun updateIntPreference(newValue: Int) {
-        preferenceDataStoreWrapper.updateIntPreference(key = prefKeyInt, newValue = newValue)
+        preferenceDataStoreWrapper.updatePreference(key = prefKeyInt, newValue = newValue)
     }
 
     override suspend fun clear() {

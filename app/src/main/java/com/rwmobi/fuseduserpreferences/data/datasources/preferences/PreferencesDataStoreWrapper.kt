@@ -23,31 +23,7 @@ class PreferencesDataStoreWrapper(
 
     fun getDataStoreFlow(): Flow<Preferences> = dataStore.data
 
-    suspend fun updateStringPreference(key: Preferences.Key<String>, newValue: String) {
-        withContext(dispatcher) {
-            try {
-                dataStore.edit { mutablePreferences ->
-                    mutablePreferences[key] = newValue
-                }
-            } catch (e: Throwable) {
-                _preferenceErrors.emit(e)
-            }
-        }
-    }
-
-    suspend fun updateBooleanPreference(key: Preferences.Key<Boolean>, newValue: Boolean) {
-        withContext(dispatcher) {
-            try {
-                dataStore.edit { mutablePreferences ->
-                    mutablePreferences[key] = newValue
-                }
-            } catch (e: Throwable) {
-                _preferenceErrors.emit(e)
-            }
-        }
-    }
-
-    suspend fun updateIntPreference(key: Preferences.Key<Int>, newValue: Int) {
+    suspend fun <T> updatePreference(key: Preferences.Key<T>, newValue: T) {
         withContext(dispatcher) {
             try {
                 dataStore.edit { mutablePreferences ->
