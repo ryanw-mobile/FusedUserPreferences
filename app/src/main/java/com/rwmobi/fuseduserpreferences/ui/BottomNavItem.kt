@@ -4,10 +4,10 @@
 
 package com.rwmobi.fuseduserpreferences.ui
 
-sealed class BottomNavItem(var title: String, var screen_route: String) {
+sealed class BottomNavItem(var title: String, var screenRoute: String) {
 
-    object SharedPreferences : BottomNavItem("SharedPreferences", "sharedPreferences")
-    object PreferencesDataStore : BottomNavItem("PreferencesDataStore", "preferencesDataStore")
+    data object SharedPreferences : BottomNavItem("SharedPreferences", "sharedPreferences")
+    data object PreferencesDataStore : BottomNavItem("PreferencesDataStore", "preferencesDataStore")
 
     companion object {
         val allItems: List<BottomNavItem>

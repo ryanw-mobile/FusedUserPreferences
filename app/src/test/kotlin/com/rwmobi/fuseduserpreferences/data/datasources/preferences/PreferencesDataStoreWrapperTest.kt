@@ -56,7 +56,7 @@ class PreferencesDataStoreWrapperTest {
         val dataFlow = preferencesDataStoreWrapper.getDataStoreFlow()
 
         // Update the preference and wait for the flow to collect the new value.
-        preferencesDataStoreWrapper.updateStringPreference(key = prefKeyString, newValue = newValue)
+        preferencesDataStoreWrapper.updatePreference(key = prefKeyString, newValue = newValue)
 
         val flowJob = launch {
             dataFlow.collect { preferences ->
@@ -74,7 +74,7 @@ class PreferencesDataStoreWrapperTest {
         val newValue = true
         val dataFlow = preferencesDataStoreWrapper.getDataStoreFlow()
 
-        preferencesDataStoreWrapper.updateBooleanPreference(key = prefKeyBoolean, newValue = newValue)
+        preferencesDataStoreWrapper.updatePreference(key = prefKeyBoolean, newValue = newValue)
 
         val flowJob = launch {
             dataFlow.collect { preferences ->
@@ -92,7 +92,7 @@ class PreferencesDataStoreWrapperTest {
         val newValue = 42
         val dataFlow = preferencesDataStoreWrapper.getDataStoreFlow()
 
-        preferencesDataStoreWrapper.updateIntPreference(key = prefKeyInt, newValue = newValue)
+        preferencesDataStoreWrapper.updatePreference(key = prefKeyInt, newValue = newValue)
 
         val flowJob = launch {
             dataFlow.collect { preferences ->
@@ -109,9 +109,9 @@ class PreferencesDataStoreWrapperTest {
     fun testClear() = runTest {
         // Setup initial values
         with(preferencesDataStoreWrapper) {
-            updateStringPreference(key = prefKeyString, newValue = "newString")
-            updateBooleanPreference(key = prefKeyBoolean, newValue = true)
-            updateIntPreference(key = prefKeyInt, newValue = 42)
+            updatePreference(key = prefKeyString, newValue = "newString")
+            updatePreference(key = prefKeyBoolean, newValue = true)
+            updatePreference(key = prefKeyInt, newValue = 42)
         }
 
         val dataFlow = preferencesDataStoreWrapper.getDataStoreFlow()
