@@ -25,7 +25,7 @@ timber = "5.0.1"
 minsdk = "26"
 targetsdk = "34"
 compilesdk = "34"
-lifecycleRuntimeCompose = "2.7.0"
+lifecycleRuntimeCompose = "2.8.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
