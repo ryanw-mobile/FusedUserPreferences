@@ -1,6 +1,6 @@
 [versions]
 agp = "8.4.1"
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -18,7 +18,7 @@ robolectric = "4.12.2"
 hilt = "2.51.1"
 hilt-navigation-compose = "1.2.0"
 # ksp is linked to Kotlin version https://github.com/google/ksp/releases
-devtoolsksp = "1.9.24-1.0.20"
+devtoolsksp = "2.0.0-1.0.21"
 timber = "5.0.1"
 
 # App configurations, not dependencies
