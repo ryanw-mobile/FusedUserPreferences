@@ -15,6 +15,7 @@ plugins {
     alias(libs.plugins.hilt.android.plugin)
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.gradleKtlint)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -119,9 +120,6 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
     }
     testOptions {
         animationsDisabled = true
