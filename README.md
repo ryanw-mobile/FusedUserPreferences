@@ -1,4 +1,5 @@
-# Fused User Preferences
+# Fused User Preferences<br />
+![Gradle Build](https://github.com/ryanw-mobile/FusedUserPreferences/actions/workflows/main_build.yml/badge.svg) [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 
 <p><img src="hero.jpg" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 
