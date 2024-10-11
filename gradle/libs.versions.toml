@@ -18,7 +18,7 @@ robolectric = "4.13"
 hilt = "2.52"
 hilt-navigation-compose = "1.2.0"
 # ksp is linked to Kotlin version https://github.com/google/ksp/releases
-devtoolsksp = "2.0.20-1.0.25"
+devtoolsksp = "2.0.21-1.0.25"
 timber = "5.0.1"
 testRules = "1.6.1"
 
