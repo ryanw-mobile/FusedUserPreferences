@@ -24,8 +24,8 @@ testRules = "1.6.1"
 
 # App configurations, not dependencies
 minsdk = "26"
-targetsdk = "34"
-compilesdk = "34"
+targetsdk = "35"
+compilesdk = "35"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
