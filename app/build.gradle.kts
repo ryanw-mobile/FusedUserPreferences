@@ -176,10 +176,6 @@ tasks.named("preBuild") {
     dependsOn(tasks.named("ktlintFormat"))
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
-
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
