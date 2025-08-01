@@ -20,7 +20,7 @@ hilt-navigation-compose = "1.2.0"
 # ksp is linked to Kotlin version https://github.com/google/ksp/releases
 devtoolsksp = "2.2.0-2.0.2"
 timber = "5.0.1"
-testRules = "1.6.1"
+testRules = "1.7.0"
 
 # App configurations, not dependencies
 minsdk = "26"
