@@ -41,34 +41,30 @@ object RepositoryModule {
         preferenceDataStoreWrapper: PreferencesDataStoreWrapper,
         externalCoroutineScope: CoroutineScope,
         @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
-    ): UserPreferencesRepository {
-        return PreferencesDataStoreRepository(
-            preferenceDataStoreWrapper = preferenceDataStoreWrapper,
-            prefKeyString = stringPreferencesKey(PreferenceKeys.PREF_KEY_STRING),
-            prefKeyBoolean = booleanPreferencesKey(PreferenceKeys.PREF_KEY_BOOLEAN),
-            prefKeyInt = intPreferencesKey(PreferenceKeys.PREF_KEY_INT),
-            stringPreferenceDefault = DefaultValues.STRING_PREFERENCE,
-            booleanPreferenceDefault = DefaultValues.BOOLEAN_PREFERENCE,
-            intPreferenceDefault = DefaultValues.INT_PREFERENCE,
-            externalCoroutineScope = externalCoroutineScope,
-            dispatcher = dispatcher,
-        )
-    }
+    ): UserPreferencesRepository = PreferencesDataStoreRepository(
+        preferenceDataStoreWrapper = preferenceDataStoreWrapper,
+        prefKeyString = stringPreferencesKey(PreferenceKeys.PREF_KEY_STRING),
+        prefKeyBoolean = booleanPreferencesKey(PreferenceKeys.PREF_KEY_BOOLEAN),
+        prefKeyInt = intPreferencesKey(PreferenceKeys.PREF_KEY_INT),
+        stringPreferenceDefault = DefaultValues.STRING_PREFERENCE,
+        booleanPreferenceDefault = DefaultValues.BOOLEAN_PREFERENCE,
+        intPreferenceDefault = DefaultValues.INT_PREFERENCE,
+        externalCoroutineScope = externalCoroutineScope,
+        dispatcher = dispatcher,
+    )
 
     @SharedPreferences
     @Provides
     @ViewModelScoped
     fun provideSharedPreferencesRepository(
         sharedPreferencesWrapper: SharedPreferencesWrapper,
-    ): UserPreferencesRepository {
-        return SharedPreferencesRepository(
-            sharedPreferencesWrapper,
-            prefKeyString = PreferenceKeys.PREF_KEY_STRING,
-            prefKeyBoolean = PreferenceKeys.PREF_KEY_BOOLEAN,
-            prefKeyInt = PreferenceKeys.PREF_KEY_INT,
-            stringPreferenceDefault = DefaultValues.STRING_PREFERENCE,
-            booleanPreferenceDefault = DefaultValues.BOOLEAN_PREFERENCE,
-            intPreferenceDefault = DefaultValues.INT_PREFERENCE,
-        )
-    }
+    ): UserPreferencesRepository = SharedPreferencesRepository(
+        sharedPreferencesWrapper,
+        prefKeyString = PreferenceKeys.PREF_KEY_STRING,
+        prefKeyBoolean = PreferenceKeys.PREF_KEY_BOOLEAN,
+        prefKeyInt = PreferenceKeys.PREF_KEY_INT,
+        stringPreferenceDefault = DefaultValues.STRING_PREFERENCE,
+        booleanPreferenceDefault = DefaultValues.BOOLEAN_PREFERENCE,
+        intPreferenceDefault = DefaultValues.INT_PREFERENCE,
+    )
 }
