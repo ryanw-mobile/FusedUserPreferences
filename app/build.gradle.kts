@@ -77,10 +77,6 @@ kotlin {
     jvmToolchain(17)
 }
 
-tasks.named("preBuild") {
-    dependsOn(tasks.named("ktlintFormat"))
-}
-
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -121,6 +117,13 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.androidx.test.rules)
 }
+
+tasks {
+    check { dependsOn("detekt") }
+    preBuild { dependsOn("formatKotlin") }
+}
+
+detekt { parallel = true }
 
 // Gradle Build Utilities
 private fun BaseAppModuleExtension.setupSdkVersionsFromVersionCatalog() {

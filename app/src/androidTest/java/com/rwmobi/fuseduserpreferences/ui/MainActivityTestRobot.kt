@@ -12,6 +12,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
+import com.rwmobi.fuseduserpreferences.ui.navigation.BottomNavItem
 import com.rwmobi.fuseduserpreferences.ui.test.FusedUserPreferencesTestRule
 import com.rwmobi.fuseduserpreferences.ui.test.withRole
 

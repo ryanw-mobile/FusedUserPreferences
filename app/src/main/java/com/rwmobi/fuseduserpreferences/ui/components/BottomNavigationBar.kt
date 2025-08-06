@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.rwmobi.fuseduserpreferences.ui.BottomNavItem
+import com.rwmobi.fuseduserpreferences.ui.navigation.BottomNavItem
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {

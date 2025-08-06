@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2024. Ryan Wong (hello@ryanwebmail.com)
+ * Copyright (c) 2025. Ryan Wong (hello@ryanwebmail.com)
  */
 
-package com.rwmobi.fuseduserpreferences.ui
+package com.rwmobi.fuseduserpreferences.ui.navigation
 
 sealed class BottomNavItem(var title: String, var screenRoute: String) {
 
