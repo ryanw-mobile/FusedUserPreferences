@@ -36,10 +36,6 @@ class PreferencesDataStoreWrapperTest {
     private val prefKeyBoolean = booleanPreferencesKey("keyBoolean")
     private val prefKeyInt = intPreferencesKey("keyInt")
 
-    private val stringPreferenceDefault: String = ""
-    private val booleanPreferenceDefault: Boolean = false
-    private val intPreferenceDefault: Int = 0
-
     @Before
     fun setup() {
         val testContext: Context = InstrumentationRegistry.getInstrumentation().targetContext
