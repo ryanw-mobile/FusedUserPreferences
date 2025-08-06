@@ -16,6 +16,7 @@ plugins {
     alias(libs.plugins.hilt.android.plugin)
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.detekt)
     alias(libs.plugins.kotlinter)
 }
 
