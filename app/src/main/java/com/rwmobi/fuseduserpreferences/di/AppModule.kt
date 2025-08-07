@@ -29,24 +29,18 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PRE
 object AppModule {
     @Provides
     @Singleton
-    fun provideApplicationScope(): CoroutineScope {
-        return CoroutineScope(
-            context = SupervisorJob() + Dispatchers.Default + CoroutineExceptionHandler { _, throwable ->
-                // Handle uncaught exceptions from this scope.
-                Timber.tag("CoroutineScope").e("Unhandled exception: $throwable")
-            },
-        )
-    }
+    fun provideApplicationScope(): CoroutineScope = CoroutineScope(
+        context = SupervisorJob() + Dispatchers.Default + CoroutineExceptionHandler { _, throwable ->
+            // Handle uncaught exceptions from this scope.
+            Timber.tag("CoroutineScope").e("Unhandled exception: $throwable")
+        },
+    )
 
     @Provides
     @Singleton
-    fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return context.dataStore
-    }
+    fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> = context.dataStore
 
     @Provides
     @Singleton
-    fun provideSharedPreferences(@ApplicationContext context: Context): android.content.SharedPreferences {
-        return context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
-    }
+    fun provideSharedPreferences(@ApplicationContext context: Context): android.content.SharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
 }

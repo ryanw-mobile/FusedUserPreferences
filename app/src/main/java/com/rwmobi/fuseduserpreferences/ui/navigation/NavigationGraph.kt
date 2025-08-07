@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2024. Ryan Wong (hello@ryanwebmail.com)
+ * Copyright (c) 2024-2025. Ryan Wong (hello@ryanwebmail.com)
  */
 
-package com.rwmobi.fuseduserpreferences.ui.screens
+package com.rwmobi.fuseduserpreferences.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,12 +13,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.rwmobi.fuseduserpreferences.domain.DefaultValues
+import com.rwmobi.fuseduserpreferences.ui.screens.PreferenceScreen
 import com.rwmobi.fuseduserpreferences.ui.viewmodels.PreferenceScreenUIEvent
 import com.rwmobi.fuseduserpreferences.ui.viewmodels.PreferencesDataStoreScreenViewModel
 import com.rwmobi.fuseduserpreferences.ui.viewmodels.SharedPreferenceScreenViewModel
 
 @Composable
-fun MainScreen(
+fun NavigationGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
 ) {

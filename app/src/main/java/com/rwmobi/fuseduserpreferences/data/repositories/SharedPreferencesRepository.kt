@@ -10,6 +10,7 @@ import com.rwmobi.fuseduserpreferences.domain.repositories.UserPreferencesReposi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 
+@Suppress("TooGenericExceptionCaught")
 class SharedPreferencesRepository(
     private val sharedPreferencesWrapper: SharedPreferencesWrapper,
     private val prefKeyString: String,
@@ -32,8 +33,10 @@ class SharedPreferencesRepository(
     private val _preferenceErrors = MutableSharedFlow<Throwable>()
     override val preferenceErrors = _preferenceErrors
 
-    // The preference manager does not currently store a strong reference to the listener. You must store a strong reference to the listener, or it will be susceptible to garbage collection.
-    // Note: This callback will not be triggered when preferences are cleared via Editor#clear(), unless targeting android.os.Build.VERSION_CODES#R on devices running OS versions Android R or later.
+    // The preference manager does not currently store a strong reference to the listener.
+    // You must store a strong reference to the listener, or it will be susceptible to garbage collection.
+    // Note: This callback will not be triggered when preferences are cleared via Editor#clear(),
+    // unless targeting android.os.Build.VERSION_CODES#R on devices running OS versions Android R or later.
     private val onSharedPreferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPref, key ->
         when (key) {
             prefKeyString -> {

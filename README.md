@@ -126,28 +126,40 @@ the [release section](https://github.com/ryanw-mobile/FusedUserPreferences/relea
 
 ### Dependencies
 
-* [JUnit](https://junit.org/junit5/) - EPL 2.0 - A simple framework to write repeatable tests
-* [AndroidX Test Ext JUnit](https://developer.android.com/jetpack/androidx/releases/test) - Apache 2.0 - Extensions for Android testing
-* [AndroidX Espresso](https://developer.android.com/training/testing/espresso) - Apache 2.0 - UI testing framework
-* [AndroidX Lifecycle](https://developer.android.com/jetpack/androidx/releases/lifecycle) - Apache 2.0 - Lifecycles-aware components
-* [AndroidX Activity Compose](https://developer.android.com/jetpack/androidx/releases/activity) - Apache 2.0 - Jetpack Compose integration with Activity
-* [Jetpack Compose BOM](https://developer.android.com/jetpack/compose/bom) - Apache 2.0 - Bill of Materials for Jetpack Compose
-* [AndroidX Core KTX](https://developer.android.com/jetpack/androidx/releases/core) - Apache 2.0 - Extensions to Java APIs for Android development
-* [AndroidX Compose UI](https://developer.android.com/jetpack/androidx/releases/compose-ui) - Apache 2.0 - UI components for Jetpack Compose
-* [AndroidX Material3](https://developer.android.com/jetpack/androidx/releases/compose-material3) - Apache 2.0 - Material Design components for Jetpack Compose
-* [JUnit Vintage Engine](https://junit.org/junit5/docs/current/user-guide/#vintage) - EPL 2.0 - Support for running JUnit 3 and JUnit 4 tests
-* [Kotlinx Coroutines Test](https://github.com/Kotlin/kotlinx.coroutines) - Apache 2.0 - Testing libraries for Kotlin coroutines
-* [AndroidX DataStore Preferences](https://developer.android.com/jetpack/androidx/releases/datastore) - Apache 2.0 - Data storage solution
-* [MockK](https://mockk.io/) - Apache 2.0 - Mocking library for Kotlin
-* [Robolectric](http://robolectric.org/) - MIT - A framework that brings fast, reliable unit tests to Android
-* [Timber](https://github.com/JakeWharton/timber) - Apache 2.0 - A logger with a small, extensible API
-* [Hilt](https://dagger.dev/hilt/) - Apache 2.0 - A dependency injection library for Android that reduces the boilerplate of doing manual dependency injection
+* [JUnit](https://junit.org/junit4/) - EPL 1.0 - Unit testing framework for Java
+* [AndroidX JUnit](https://developer.android.com/jetpack/androidx/releases/test) - Apache 2.0 - AndroidX JUnit extensions
+* [Espresso Core](https://developer.android.com/training/testing/espresso) - Apache 2.0 - Android UI testing framework
+* [AndroidX Lifecycle Runtime KTX](https://developer.android.com/jetpack/androidx/releases/lifecycle) - Apache 2.0 - Lifecycle-aware components
+* [AndroidX Lifecycle Runtime Compose](https://developer.android.com/jetpack/androidx/releases/lifecycle) - Apache 2.0 - Lifecycle integration with Jetpack Compose
+* [AndroidX Activity Compose](https://developer.android.com/jetpack/androidx/releases/activity) - Apache 2.0 - Activity integration for Jetpack Compose
+* [Jetpack Compose BOM](https://developer.android.com/jetpack/compose/bom) - Apache 2.0 - Compose Bill of Materials
+* [AndroidX JUnit KTX](https://developer.android.com/jetpack/androidx/releases/test) - Apache 2.0 - Kotlin extensions for JUnit
+* [AndroidX Core KTX](https://developer.android.com/jetpack/androidx/releases/core) - Apache 2.0 - Kotlin extensions for core Android libraries
+* [AndroidX Test Core KTX](https://developer.android.com/jetpack/androidx/releases/test) - Apache 2.0 - Core testing utilities for AndroidX
+* [Jetpack Compose UI](https://developer.android.com/jetpack/compose/ui) - Apache 2.0 - Compose UI components
+* [Jetpack Compose UI Graphics](https://developer.android.com/jetpack/compose/graphics) - Apache 2.0 - Compose graphics utilities
+* [Jetpack Compose UI Tooling](https://developer.android.com/jetpack/compose/tooling) - Apache 2.0 - Tooling support for Compose UI
+* [Jetpack Compose UI Tooling Preview](https://developer.android.com/jetpack/compose/tooling) - Apache 2.0 - Preview support for Compose
+* [Jetpack Compose UI Test Manifest](https://developer.android.com/jetpack/compose/testing) - Apache 2.0 - Manifest support for Compose UI testing
+* [Jetpack Compose UI Test JUnit4](https://developer.android.com/jetpack/compose/testing) - Apache 2.0 - Compose UI testing with JUnit4
+* [Material3](https://developer.android.com/jetpack/androidx/releases/compose-material3) - Apache 2.0 - Jetpack Compose Material3 components
+* [Kotlinx Coroutines Test](https://github.com/Kotlin/kotlinx.coroutines) - Apache 2.0 - Coroutine testing utilities
+* [AndroidX DataStore Preferences](https://developer.android.com/topic/libraries/architecture/datastore) - Apache 2.0 - Data storage solution
+* [MockK Android](https://mockk.io/) - Apache 2.0 - Mocking library for Kotlin
+* [Robolectric](http://robolectric.org/) - Apache 2.0 - Unit testing framework for Android
+* [Timber](https://github.com/JakeWharton/timber) - Apache 2.0 - Logging utility for Android
+* [AndroidX Test Rules](https://developer.android.com/jetpack/androidx/releases/test) - Apache 2.0 - JUnit test rules for Android testing
+* [Hilt Android](https://dagger.dev/hilt/) - Apache 2.0 - Dependency injection for Android
+* [Hilt Compiler](https://dagger.dev/hilt/) - Apache 2.0 - Annotation processor for Hilt
+* [Hilt Android Testing](https://dagger.dev/hilt/testing.html) - Apache 2.0 - Instrumented testing support for Hilt
+* [Hilt Navigation Compose](https://developer.android.com/jetpack/hilt/navigation) - Apache 2.0 - Hilt support for Compose Navigation
 
 ### Plugins
 
 * [Android Application Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) - Google - Plugin for building Android applications
-* [Jetbrains Kotlin Android Plugin](https://kotlinlang.org/docs/gradle.html) - JetBrains - Plugin for Kotlin Android projects
-* [Compose Compiler Plugin](https://developer.android.com/jetpack/compose) - JetBrains - Plugin for Jetpack Compose
-* [Ktlint Plugin](https://github.com/JLLeitschuh/ktlint-gradle) - JLLeitschuh - Plugin for Kotlin linter
-* [Hilt Android Plugin](https://dagger.dev/hilt/gradle-setup.html) - Google - Plugin for Hilt dependency injection
-* [Google DevTools KSP](https://github.com/google/ksp) - Google - Kotlin Symbol Processing API plugin
+* [Kotlin Android Plugin](https://kotlinlang.org/docs/gradle.html#android) - JetBrains - Kotlin support for Android
+* [Compose Compiler Plugin](https://developer.android.com/jetpack/compose) - JetBrains - Compiler plugin for Jetpack Compose
+* [Hilt Android Plugin](https://dagger.dev/hilt/gradle-setup) - Google - Plugin for setting up Hilt in Android projects
+* [KSP Plugin](https://github.com/google/ksp) - Google - Kotlin Symbol Processing plugin
+* [Detekt Plugin](https://detekt.dev/) - Artur Bosch - Static code analysis for Kotlin
+* [Kotlinter Plugin](https://github.com/jeremymailen/kotlinter-gradle) - Jeremy Lelliott - Linter for Kotlin

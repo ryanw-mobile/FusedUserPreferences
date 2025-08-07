@@ -22,18 +22,14 @@ object DataSourcesModule {
     fun providePreferencesDataStore(
         dataStore: DataStore<androidx.datastore.preferences.core.Preferences>,
         @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
-    ): PreferencesDataStoreWrapper {
-        return PreferencesDataStoreWrapper(
-            dataStore = dataStore,
-            dispatcher = dispatcher,
-        )
-    }
+    ): PreferencesDataStoreWrapper = PreferencesDataStoreWrapper(
+        dataStore = dataStore,
+        dispatcher = dispatcher,
+    )
 
     @Provides
     @Singleton
     fun provideSharedPreferences(
         sharedPreferences: android.content.SharedPreferences,
-    ): SharedPreferencesWrapper {
-        return SharedPreferencesWrapper(sharedPreferences = sharedPreferences)
-    }
+    ): SharedPreferencesWrapper = SharedPreferencesWrapper(sharedPreferences = sharedPreferences)
 }

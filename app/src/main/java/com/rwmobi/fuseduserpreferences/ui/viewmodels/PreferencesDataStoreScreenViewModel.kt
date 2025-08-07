@@ -88,27 +88,19 @@ class PreferencesDataStoreScreenViewModel @Inject constructor(
         }
     }
 
-    fun updateStringPreference(newValue: String) {
-        viewModelScope.launch {
-            userPreferencesRepository.updateStringPreference(newValue)
-        }
+    fun updateStringPreference(newValue: String) = viewModelScope.launch(dispatcher) {
+        userPreferencesRepository.updateStringPreference(newValue)
     }
 
-    fun updateBooleanPreference(newValue: Boolean) {
-        viewModelScope.launch {
-            userPreferencesRepository.updateBooleanPreference(newValue)
-        }
+    fun updateBooleanPreference(newValue: Boolean) = viewModelScope.launch(dispatcher) {
+        userPreferencesRepository.updateBooleanPreference(newValue)
     }
 
-    fun updateIntPreference(newValue: Int) {
-        viewModelScope.launch {
-            userPreferencesRepository.updateIntPreference(newValue)
-        }
+    fun updateIntPreference(newValue: Int) = viewModelScope.launch(dispatcher) {
+        userPreferencesRepository.updateIntPreference(newValue)
     }
 
-    fun clearPreferences() {
-        viewModelScope.launch {
-            userPreferencesRepository.clear()
-        }
+    fun clearPreferences() = viewModelScope.launch(dispatcher) {
+        userPreferencesRepository.clear()
     }
 }
