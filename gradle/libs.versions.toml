@@ -14,7 +14,7 @@ datastorePreferences = "1.1.7"
 mockk = "1.14.5"
 junitKtx = "1.3.0"
 robolectric = "4.16"
-hilt = "2.57.1"
+hilt = "2.57.2"
 hilt-navigation-compose = "1.3.0"
 # ksp is linked to Kotlin version https://github.com/google/ksp/releases
 devtoolsksp = "2.2.20-2.0.3"
