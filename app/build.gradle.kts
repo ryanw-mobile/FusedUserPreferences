@@ -107,6 +107,7 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     kspAndroidTest(libs.hilt.android.compiler)
+    ksp(libs.kotlin.metadata.jvm)
 
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.androidx.junit)
