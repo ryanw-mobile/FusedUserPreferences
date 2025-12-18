@@ -50,6 +50,7 @@ fun FusedUserPreferencesTheme(
         }
 
         darkTheme -> DarkColorScheme
+
         else -> LightColorScheme
     }
 
