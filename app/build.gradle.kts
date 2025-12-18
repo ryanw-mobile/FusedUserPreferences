@@ -54,11 +54,10 @@ android {
 
         managedDevices {
             allDevices {
-                create<ManagedVirtualDevice>("pixel2Api34") {
+                create<ManagedVirtualDevice>("pixel2Api35") {
                     device = "Pixel 2"
-                    apiLevel = 34
+                    apiLevel = 35
                     systemImageSource = "aosp-atd"
-                    testedAbi = "arm64-v8a" // better performance on CI and Macs
                 }
             }
         }
@@ -108,6 +107,7 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     kspAndroidTest(libs.hilt.android.compiler)
+    ksp(libs.kotlin.metadata.jvm)
 
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.androidx.junit)
