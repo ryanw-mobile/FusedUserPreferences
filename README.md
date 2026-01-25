@@ -116,8 +116,8 @@ production apps it is not likely that we have a need to use both sources interch
 
 ## Let's download and run it!
 
-This project was configured to build using Android Studio Iguana | 2023.2.1. You will need to have
-Java 17 to build the project.
+This project was configured to build using Android Studio Otter 3 Feature Drop | 2025.2.3. You will need to have
+Java 21 to build the project.
 
 Alternatively, you can find the ready-to-install APKs and App Bundles under
 the [release section](https://github.com/ryanw-mobile/FusedUserPreferences/releases).
