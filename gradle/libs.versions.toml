@@ -21,7 +21,7 @@ hilt-navigation-compose = "1.4.0"
 devtoolsksp = "2.3.11"
 timber = "5.0.1"
 testRules = "1.7.0"
-kotlinter = "5.5.0"
+kotlinter = "5.7.0"
 detekt = "1.23.8"
 
 # App configurations, not dependencies
